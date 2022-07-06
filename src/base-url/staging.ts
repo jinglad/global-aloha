@@ -1,0 +1,47 @@
+// export const staging = {
+//     GA_GROUP_API_URL: 'http://54.190.110.155:9081/api/v1',
+//     GA_ACTIVITY_API_URL: 'http://54.190.110.155:9083/v1',
+//     User_API_URL: 'http://54.190.110.155:8083',
+//     Profile_API_URL: 'http://54.190.110.155:8088/v2',
+//     Storage_API_URL: 'http://54.190.110.155:8091',
+//     Request_API_URL: 'http://54.190.110.155:8090',
+//     Request_WS_URL: 'ws://54.190.110.155:9076',
+//     Notification_API_URL: 'http://54.190.110.155:8086',
+//     Notification_WS_URL: 'ws://54.190.110.155:9070',
+//     Sponsorship_API_URL: 'http://54.190.110.155:8067/api/v1',
+//     Generic_WS_URL: 'ws://54.190.110.155:9079',
+//     LOGGER_API_URL: 'http://54.201.133.90:8080',
+//     Messaging_API_URL: 'http://54.190.110.155:8089/v1',
+//     Messaging_WS_URL: 'ws://54.190.110.155:9078',
+//     Elastic_Search_API_URL: 'http://54.190.110.155:8078',
+//     Post_API_URL: 'http://54.190.110.155:8065/',
+//     Reaction_API_URL: 'http://54.190.110.155:8087/',
+//     PayPal_API_URL: 'https://api.sandbox.paypal.com',
+//     Module_API_URL: 'http://54.190.110.155:8079/V1/',
+//     Email_API_URL: 'http://54.190.110.155:8081',
+//     Scheduling_API_URL: 'http://54.190.110.155:8096/v1'
+// }
+
+export const staging = {
+  GA_GROUP_API_URL: 'https://api-gagroupservice-dev.saams.xyz/api/v1',
+  GA_ACTIVITY_API_URL: 'https://api-globalalohaservice-dev.saams.xyz/v1',
+  User_API_URL: 'https://api-userservice-dev.saams.xyz',
+  Profile_API_URL: 'https://api-profileservice-dev.saams.xyz/v2',
+  Storage_API_URL: 'https://api-storageservice-dev.saams.xyz',
+  Request_API_URL: 'https://api-requestservice-dev.saams.xyz',
+  Request_WS_URL: 'wss://websockets-dev.saams.xyz/requestservice',
+  Notification_API_URL: 'https://api-notificationservice-dev.saams.xyz',
+  Notification_WS_URL: 'wss://websockets-dev.saams.xyz/notificationservice',
+  Sponsorship_API_URL: 'https://api-sponsorservice-dev.saams.xyz/api/v1',
+  Generic_WS_URL: 'wss://websockets-dev.saams.xyz/genericsocketservice',
+  LOGGER_API_URL: 'http://54.201.133.90:8080',   //https://saasms-seq-stg.saams.xyz
+  Messaging_API_URL: 'https://api-messagingservice-dev.saams.xyz/v1',
+  Messaging_WS_URL: 'wss://websockets-dev.saams.xyz/messagingservice',
+  Elastic_Search_API_URL: 'https://api-elasticservice-dev.saams.xyz',
+  Post_API_URL: 'https://api-postservice-dev.saams.xyz/',
+  Reaction_API_URL: 'https://api-reactionservice-dev.saams.xyz/',
+  PayPal_API_URL: 'https://api.sandbox.paypal.com',
+  Module_API_URL: 'https://api-moduleservice-dev.saams.xyz/V1/',
+  Email_API_URL: 'https://api-emailservice-dev.saams.xyz',
+  Scheduling_API_URL: 'https://api-schedulingservice-dev.saams.xyz/v1'
+}
