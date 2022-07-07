@@ -2,30 +2,15 @@ import { Button } from "antd";
 import React from "react";
 
 const Card = ({item}:any) => {
+  console.log("item ", item);
   return (
-    <div className="shadow shadow-blue-500/40 p-3 rounded">
-      <div className="cursor-pointer">
-        <img src="/images/sample-image.jpg" alt="Sample Image" className="rounded" />
+    <div className="shadow shadow-blue-500/40 p-3 rounded overflow-hidden">
+      <div className="cursor-pointer h-60">
+        <img src={item.Photo ? item.Photo : "/images/thumbnail-default.jpeg"} alt="Sample Image" className="rounded w-full h-full" />
       </div>
-      <div className="flex justify-between items-center mb-3">
+      <div className="flex items-center mb-3">
         <div className="cursor-pointer">
-          <p className="m-0 text-lg font-semibold">Activity service</p>
-        </div>
-        <div className="cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
+          <p className="m-0 text-lg font-semibold">{item.Title}</p>
         </div>
       </div>
       <div className="flex justify-between items-center mb-3">

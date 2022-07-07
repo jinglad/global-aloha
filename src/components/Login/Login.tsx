@@ -1,9 +1,11 @@
 import { Button } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../../Redux/userSlice";
+import { getProfile } from "../../request/getProfile";
 import { getUserInfo } from "../../request/getUserInfo";
 
 const Login: React.FC = () => {
@@ -14,6 +16,8 @@ const Login: React.FC = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
+
+  const {user, profile} = useSelector((state:any) => state.user);
 
   const signIn = async (e: any) => {
     e.preventDefault();
@@ -43,7 +47,7 @@ const Login: React.FC = () => {
       dispatch(setAccessToken(res.access_token));
       setEmail("");
       setPassword("");
-      getUserInfo(dispatch, res.access_token);
+      getUserInfo(dispatch, res.access_token, router);
       // router.push("/");
     }
   };
@@ -74,6 +78,7 @@ const Login: React.FC = () => {
                     placeholder="Enter email address"
                     className="login-input"
                     onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                   />
                 </div>
               </div>
@@ -84,6 +89,7 @@ const Login: React.FC = () => {
                   placeholder="Enter password"
                   className="login-input"
                   onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
               </div>
               <div className="my-4">

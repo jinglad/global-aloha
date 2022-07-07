@@ -1,7 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+type PropsType = {
+  globalAccessToken: string,
+  user: any,
+  profile: any,
+}
+
 const initialState = {
   globalAccessToken: "",
-  user: "",
+  user: null,
+  profile: null,
 }
 
 const userSlice = createSlice({
@@ -12,11 +20,15 @@ const userSlice = createSlice({
       state.globalAccessToken = action.payload;
     },
     setUser: (state, action) => {
-      state.user = action.payload
+      state.user = action.payload;
+    },
+    setProfile: (state, action) => {
+      console.log("profile", state.profile);
+      state.profile = action.payload;
     }
   }
 })
 
-export const { setAccessToken } = userSlice.actions;
+export const { setAccessToken, setUser, setProfile } = userSlice.actions;
 
 export default userSlice.reducer;
