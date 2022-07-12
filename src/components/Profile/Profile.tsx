@@ -1,9 +1,14 @@
+import Head from "next/head";
 import React from "react";
 import MainProfile from "./MainProfile";
 
 const Profile = () => {
   return (
-    <div className="flex">
+    <>
+    <Head>
+      <title>Global Aloha | Profile</title>
+    </Head>
+      <div className="flex">
       <div className="w-80 mr-5">
         <div className="bg-slate-300 h-screen overflow-auto sticky top-0">
           <div className="py-5">
@@ -43,6 +48,7 @@ const Profile = () => {
         <MainProfile />
       </div>
     </div>
+    </>
   );
 };
 

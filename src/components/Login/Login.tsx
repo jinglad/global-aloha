@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -53,7 +54,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div
+    <>
+    <Head>
+      <title>Global Aloha | Login</title>
+    </Head>
+      <div
       className="flex justify-center items-center"
       style={{ height: "500px" }}
     >
@@ -131,6 +136,7 @@ const Login: React.FC = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

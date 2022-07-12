@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { setGroups } from "../../../Redux/librarySlice";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
 
 const AppHeader = () => {
@@ -32,7 +33,7 @@ const AppHeader = () => {
               <Link href="/library">
                 <a className="text-md mr-5 text-black hover:text-lime-400">Activity Library</a>
               </Link>
-              <Link href="">
+              <Link href="/groups">
                 <a className="text-md text-black hover:text-lime-400">Groups</a>
               </Link>
             </div>
@@ -44,11 +45,11 @@ const AppHeader = () => {
                   title={
                     <div>
                       <h5 className="text-md font-bold mb-0">
-                        {profile.firstName}{" "}{profile.lastName}
+                        {profile?.firstName}{" "}{profile?.lastName}
                       </h5>
                       <p className="m-0">
                         <small className="text-gray-400 text-sm">
-                          {profile.email}
+                          {profile?.email}
                         </small>
                       </p>
                     </div>
@@ -78,7 +79,7 @@ const AppHeader = () => {
                   }
                 >
                   <div className="flex items-center">
-                  <Avatar size="large" src={profile.profilePhoto ? profile.profilePhoto : "https://joeschmoe.io/api/v1/random"} />
+                  <Avatar size="large" src={profile?.profilePhoto ? profile?.profilePhoto : "https://joeschmoe.io/api/v1/random"} />
                   </div>
                 </Popover>
               </div>
