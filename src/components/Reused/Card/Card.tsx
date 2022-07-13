@@ -1,19 +1,19 @@
 import { Button } from "antd";
 import React from "react";
 
-const Card = ({item}:any) => {
-  console.log("item ", item);
+const Card = ({item, type}:any) => {
   return (
     <div className="shadow shadow-blue-500/40 p-3 rounded overflow-hidden">
       <div className="cursor-pointer h-60">
-        <img src={item.Photo ? item.Photo : "/images/thumbnail-default.jpeg"} alt="Sample Image" className="rounded w-full h-full" />
+        <img src={item.Photo || "/images/thumbnail-default.jpeg"} alt="Sample Image" className="rounded w-full h-full" />
       </div>
       <div className="flex items-center mb-3">
         <div className="cursor-pointer">
           <p className="m-0 text-lg font-semibold">{item.Title}</p>
         </div>
       </div>
-      <div className="flex justify-between items-center mb-3">
+      {/* {
+        type === "library" && <div className="flex justify-between items-center mb-3">
         <div className="flex items-center">
           <div className="mr-1">
             <svg
@@ -59,6 +59,7 @@ const Card = ({item}:any) => {
           </div>
         </div>
       </div>
+      } */}
       <div>
         <Button type="primary" block>Join</Button>
       </div>
