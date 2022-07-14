@@ -44,7 +44,7 @@ const Login: React.FC = () => {
     setLoading(false);
     if (response.ok) {
       const res = await response.json();
-      // console.log(res);
+      typeof window !== undefined && localStorage.setItem("ga_token", res.access_token);
       dispatch(setAccessToken(res.access_token));
       setEmail("");
       setPassword("");

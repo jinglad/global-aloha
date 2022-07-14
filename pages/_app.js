@@ -9,9 +9,13 @@ function MyApp({ Component, pageProps }) {
   const store = useStore();
   return (
     <PersistGate loading={null} persistor={store.__persistor}>
-      <LayoutComp>
-        <Component {...pageProps} />
-      </LayoutComp>
+      {() => {
+        return (
+          <LayoutComp>
+            <Component {...pageProps} />
+          </LayoutComp>
+        );
+      }}
     </PersistGate>
   );
 }

@@ -29,6 +29,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setAccessToken, setUser, setProfile } = userSlice.actions;
+export const { setAccessToken, setUser, setProfile } = userSlice.actions; 
 
 export default userSlice.reducer;

@@ -11,7 +11,7 @@ export const getGroupsList = async (
 ) => {
   setLoading(true);
   const response = await fetch(
-    `https://gagroupservice.saasms.com/api/v1/group/library?pageIndex=${pageIndex}&pageSize=${pageSize}&applicationId=${applicationId}&tenantId=${tenantId}`,
+    `https://api-gagroupservice-dev.saams.xyz/api/v1/group/library?pageIndex=${pageIndex}&pageSize=${pageSize}&applicationId=${applicationId}&tenantId=${tenantId}`,
     {
       method: "GET",
       headers: {
