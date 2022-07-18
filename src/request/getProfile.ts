@@ -19,6 +19,7 @@ export const getProfile = async (
   );
 
   if (response.ok) {
+    // console.log(response?.json());
     const res = await response.json();
     dispatch(setProfile(res));
     router.push("/profile");

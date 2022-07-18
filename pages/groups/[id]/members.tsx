@@ -3,15 +3,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Login from "../../../src/components/Login/Login";
 import MemberDetails from "../../../src/components/Reused/MemberDetails/MemberDetails";
+import { getGroupDetails } from "../../../src/request/getGroupDetails";
 
-const MembersPage = ({ data }: any) => {
+const MembersPage = ({id }: any) => {
   const [count, setCount] = useState(0);
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
 
   const { globalAccessToken } = useSelector((state: any) => state.user);
+  const token = typeof window !== 'undefined' && localStorage.getItem("ga_token");
   const router = useRouter();
-  const { id } = router.query;
+  // const { id } = router.query;
 
   // console.log(globalAccessToken)
 
@@ -23,7 +26,7 @@ const MembersPage = ({ data }: any) => {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          Authorization: `Bearer ${globalAccessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({}),
       }
@@ -39,7 +42,14 @@ const MembersPage = ({ data }: any) => {
 
   useEffect(() => {
     getCollectionWithPagination();
-  }, [id, globalAccessToken]);
+  }, []);
+
+  useEffect(() => {
+    const token =
+      typeof window !== undefined && localStorage.getItem("ga_token");
+    const res = getGroupDetails(token, id);
+    res.then((result) => setData(result));
+  }, []);
 
   return (
     <>
@@ -62,27 +72,10 @@ export default MembersPage;
 
 export async function getServerSideProps({ params }: any) {
   const { id } = params;
-  const response = await fetch(
-    `https://api-gagroupservice-dev.saams.xyz/api/v1/group/${id}`,
-    {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    }
-  );
-
-  const res = await response.json();
-
-  if (!res) {
-    return {
-      notFound: true,
-    };
-  }
 
   return {
     props: {
-      data: res,
+      id,
     },
   };
 }

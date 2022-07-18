@@ -3,6 +3,7 @@ import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import GroupSidebar from "../../Groups/GroupSidebar";
+import DetailsHeader from "../DetailsHeader/DetailsHeader";
 import InviteModal from "./InviteModal";
 
 type PropsType = {
@@ -21,6 +22,8 @@ const MemberDetails = ({
   total,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
+
+  // console.log({data});
 
   const onClose = () => setOpen(false);
 
@@ -45,7 +48,7 @@ const MemberDetails = ({
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Button type="primary">Action</Button>
+          {data?.IsCurrentUserManager && <Button type="primary">Action</Button>}
         </Space>
       ),
     },
@@ -82,48 +85,19 @@ const MemberDetails = ({
     setTableData(newArray);
   }, [collection]);
 
+  // console.log({ data });
+
   return (
     <>
       <Head>
-        <title>Global Aloha | {data.title}</title>
+        <title>Global Aloha | {data?.title}</title>
       </Head>
       <div className="w-3/5 mx-auto mt-5">
         <div>
-          <div className="h-60 w-full rounded relative overflow-hidden">
-            <img
-              src={
-                data.Properties?.[0]?.Value
-                  ? data.Properties?.[0]?.Value
-                  : "/images/default-cover.png"
-              }
-              alt={data.Properties?.[0]?.Key}
-              className="w-full rounded object-cover h-full"
-            />
-          </div>
-          <div className="mt-3 flex items-center">
-            <div className="w-20 h-20 mr-3">
-              <img
-                src={data.Properties?.[1]?.Value}
-                alt={data.Properties?.[1]?.Key}
-                className="w-full h-full"
-              />
-            </div>
-            <div>
-              <h3 className="font-bold text-lg m-0">{data.Title}</h3>
-              <p className="m-0">{data.Properties?.[3]?.Value}</p>
-            </div>
-          </div>
-          <div className="text-right mb-2">
-            <button
-              className="py-2 px-3 rounded bg-lime-400 text-white cursor-pointer hover:bg-lime-500"
-              onClick={() => setOpen(true)}
-            >
-              Invite
-            </button>
-          </div>
+          <DetailsHeader data={data} />
           <div className="relative flex">
             <div>
-              <GroupSidebar />
+              <GroupSidebar data={data} />
             </div>
             <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2 w-full">
               <Table

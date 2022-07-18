@@ -1,5 +1,6 @@
 import { Button, Radio, RadioChangeEvent } from "antd";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -13,6 +14,9 @@ const MyGroup = () => {
   const [size, setSize] = useState(12);
   const [open, setOpen] = useState(false);
   const [filterValue, setFilterValue] = useState(null);
+
+  const router = useRouter();
+  const {id} = router.query;
 
   const onClose = () => {
     setOpen(false);
@@ -72,7 +76,7 @@ const MyGroup = () => {
         </div>
         <div className="mt-5 grid xl:grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {group?.map((item: any) => (
-            <Card key={item.Id} item={item} type="library" />
+            <Card key={item.Id} item={item} type="groups" />
           ))}
           {group?.length === 0 && (
             <h3 className="col-span-full font-bold text-center text-xl">

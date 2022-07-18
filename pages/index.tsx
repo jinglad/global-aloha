@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     router.push(globalAccessToken ? "/dashboard/my-activity" : "/login");
-  },[])
+  },[globalAccessToken])
 
   return (
     <div>

@@ -18,23 +18,27 @@ const GroupDetails = ({ data }: propsType) => {
   const [student, setStudent] = useState([]);
   const [influencer, setInfluencer] = useState([]);
   const [observer, setObserver] = useState([]);
-  const [roles, setRoles] = useState<any>(null);
+  // const [roles, setRoles] = useState<any>(null);
   const router = useRouter();
   const { id } = router.query;
 
-  useEffect(() => {
-    const newRoles = getRoles(
-      globalAccessToken,
-      user.ApplicationId,
-      user.TenantId
-    );
-    setRoles(newRoles);
-  }, []);
+  // console.log({data})
+
+  // useEffect(() => {
+  //   const newRoles = getRoles(
+  //     globalAccessToken,
+  //     user?.ApplicationId,
+  //     user?.TenantId
+  //   );
+  //   setRoles(newRoles);
+  // }, [globalAccessToken]);
 
   useEffect(() => {
-    const newData = getCollection(globalAccessToken, id);
+    const token =
+      typeof window !== "undefined" && localStorage.getItem("ga_token");
+    const newData = getCollection(token, data?.GroupId);
     newData.then((res) => {
-      const newRes = res.flat();
+      const newRes = res?.flat();
       const newAdvisor = newRes?.filter((item: any) => item.RoleType === 1);
       const newStudent = newRes?.filter((item: any) => item.RoleType === 2);
       const newInfluencer = newRes?.filter((item: any) => item.RoleType === 3);
@@ -44,44 +48,46 @@ const GroupDetails = ({ data }: propsType) => {
       setInfluencer(newInfluencer);
       setObserver(newObserver);
     });
-  }, []);
+  }, [data]);
 
   return (
     <>
       <Head>
-        <title>Global Aloha | {data.Title}</title>
+        <title>Global Aloha | {data?.Title}</title>
       </Head>
       <div className="w-3/5 mx-auto mt-5">
         <div>
           <div className="h-60 w-full rounded relative overflow-hidden">
             <img
               src={
-                data.Properties?.[0]?.Value
-                  ? data.Properties?.[0]?.Value
+                data?.Properties?.[0]?.Value
+                  ? data?.Properties?.[0]?.Value
                   : "/images/default-cover.png"
               }
-              alt={data.Properties?.[0]?.Key}
+              alt={data?.Properties?.[0]?.Key}
               className="w-full rounded object-cover h-full"
             />
           </div>
           <div className="mt-3 flex items-center">
             <div className="w-20 h-20 mr-3">
               <img
-                src={data.Properties?.[1]?.Value}
-                alt={data.Properties?.[1]?.Key}
+                src={data?.Properties?.[1]?.Value}
+                alt={data?.Properties?.[1]?.Key}
                 className="w-full h-full"
               />
             </div>
             <div>
-              <h3 className="font-bold text-lg m-0">{data.Title}</h3>
-              <p className="m-0">{data.Properties?.[3]?.Value}</p>
+              <h3 className="font-bold text-lg m-0">{data?.Title}</h3>
+              <p className="m-0">{data?.Properties?.[3]?.Value}</p>
             </div>
           </div>
           <div className="relative flex">
-            <div>
-              <GroupSidebar />
-            </div>
-            <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2">
+            {globalAccessToken && (
+              <div>
+                <GroupSidebar data={data} />
+              </div>
+            )}
+            <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2 mt-3">
               <div>
                 <h4 className="text-lg font-bold">Group Description</h4>
                 <p className="m-0">{data?.Properties?.[7]?.Value}</p>

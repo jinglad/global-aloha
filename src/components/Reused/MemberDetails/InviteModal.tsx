@@ -1,7 +1,9 @@
 import { Button, Modal, Radio, RadioChangeEvent } from "antd";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getRoles } from "../../../request/getRoles";
+import Loader from "../Loader/Loader";
 
 type FilterPropsType = {
   open: boolean;
@@ -17,12 +19,28 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
   const [invite, setInvite] = useState<any>([]);
   const [roles, setRoles] = useState<any>([]);
   const [value, setValue] = useState<any>([]);
+  const [searchLoader, setsearchLoader] = useState(false);
+  const router = useRouter();
+  const {id} = router.query;
 
-  const handleOk = () => {
-    console.log(invite);
+  const handleOk = async () => {
+    const response = await fetch(`https://gagroupservice.saasms.com/api/v1/group/${id}/collections`, {
+      method: "POST",
+      headers: {
+        "content-type":"application/json",
+        "authorization": `Bearer ${globalAccessToken}`
+      },
+      body: JSON.stringify(invite)
+    })
+
+    if(response.ok) {
+      const res = await response.json();
+      console.log({inviteResult: res});
+    }
   };
 
   const handleSearch = async () => {
+    setsearchLoader(true);
     const response = await fetch(
       `https://api-profileservice-dev.saams.xyz/v2/profile/advancesearch?q=${term}`,
       {
@@ -33,6 +51,8 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
         },
       }
     );
+
+    setsearchLoader(false);
 
     if (response.ok) {
       const res = await response.json();
@@ -60,15 +80,14 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
     newRoles.then((result) => setRoles(result));
   }, []);
 
-  const handleRadio = (e: RadioChangeEvent) => {
-    const newData = [...value];
-    newData.push(e.target.value);
-    setValue(newData);
-  };
-
   const handleRole = (index: number, role: string) => {
     const current = { ...invite[index] };
-    current.Roles.push(role);
+    if(current.Roles.length > 0) {
+      current.Roles.pop();
+      current.Roles.push(role);
+    } else {
+      current.Roles.push(role);
+    }
     const newArray = [...invite];
     newArray[index] = current;
     setInvite(newArray);
@@ -91,57 +110,69 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
           placeholder="Enter Name"
           className="py-3 px-2 bg-gray-100 rounded w-full outline-none"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            // handleSearch(e.target.value)
             setTerm(e.target.value)
           }
         />
       </div>
 
-      {result?.length > 0 && (
-        <div className="pb-3 h-48 overflow-y-scroll mt-2">
-          {result.map((item: any) => (
-            <p
-              key={item.id}
-              className="m-0 p-2 bg-gray-200 font-semibold cursor-pointer hover:bg-gray-400"
-              onClick={() => {
-                const newItem = [...invite];
-                newItem.push({
-                  Body: `Hi,<br>I would like you to join my group: <strong>${item.firstName}</strong>`,
-                  Email: item.email,
-                  Name: item.firstName || "",
-                  Photo: item.profilePhoto || "",
-                  Roles: [],
-                  Subject: `Invitation from ${profile.firstName} to Join Publish ${item.firstName}`,
-                  UserId: user.id,
-                });
-                setInvite(newItem);
-                setResult([]);
-              }}
-            >
-              {item.email}
-            </p>
-          ))}
-        </div>
-      )}
+      <div className="relative">
+        {searchLoader ? (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
+          >
+            <Loader />
+          </div>
+        ) : (
+          result?.length > 0 && (
+            <div className="pb-3 h-48 overflow-y-scroll mt-2">
+              {result.map((item: any) => (
+                <p
+                  key={item.id}
+                  className="m-0 p-2 bg-gray-200 font-semibold cursor-pointer hover:bg-gray-400"
+                  onClick={() => {
+                    const newItem = [...invite];
+                    newItem.push({
+                      Body: `Hi,<br>I would like you to join my group: <strong>${item.firstName}</strong>`,
+                      Email: item.email,
+                      Name: item.firstName || "",
+                      Photo: item.profilePhoto || "",
+                      Roles: [],
+                      Subject: `Invitation from ${profile.firstName} to Join Publish ${item.firstName}`,
+                      UserId: item.id,
+                    });
+                    setInvite(newItem);
+                    setResult([]);
+                  }}
+                >
+                  {item.email}
+                </p>
+              ))}
+            </div>
+          )
+        )}
+      </div>
 
       {invite?.length > 0 && (
         <div className="pb-3 h-48 overflow-y-scroll mt-2">
-          {invite.map((item: any, i:number) => (
-            <div className="p-2 bg-gray-100">
+          {invite.map((item: any, i: number) => (
+            <div className="p-2 bg-gray-100 mb-1">
               <p className="m-0 mb-1 font-bold">{item.Email}</p>
               <div>
-                <Radio.Group onChange={handleRadio} value={value}>
-                  {roles?.map((role: any) => (
-                    <Radio
-                      key={role.RoleType}
-                      value={role.RoleType}
-                      onClick={() => handleRole(i, role.Id)}
-                      // checked={}
-                    >
-                      {role.RoleName}
-                    </Radio>
-                  ))}
-                </Radio.Group>
+                {roles?.map((role: any) => (
+                  <Button
+                    onClick={() => handleRole(i, role.Id)}
+                    key={role.RoleType}
+                    className="mr-1"
+                    type={item.Roles.includes(role.Id) ? "primary" : "default"}
+                  >
+                    {role.RoleName}
+                  </Button>
+                ))}
               </div>
             </div>
           ))}

@@ -2,7 +2,13 @@ import { Button } from "antd";
 import { useRouter } from "next/router";
 import React from "react";
 
-const Card = ({ item, type }: any) => {
+type PropsType = {
+  item: any;
+  type:string;
+  myGroup?: boolean;
+}
+
+const Card = ({ item, type, myGroup }: PropsType) => {
   const router = useRouter();
   return (
     <div
@@ -24,11 +30,6 @@ const Card = ({ item, type }: any) => {
         <div className="cursor-pointer">
           <p className="m-0 text-lg font-semibold">{item.Title}</p>
         </div>
-      </div>
-      <div>
-        <Button type="primary" block>
-          Join
-        </Button>
       </div>
     </div>
   );

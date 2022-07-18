@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-const GroupSidebar = () => {
+const GroupSidebar = ({ data }: any) => {
   const router = useRouter();
   const { id } = router.query;
   return (
@@ -19,12 +19,14 @@ const GroupSidebar = () => {
         >
           Members
         </p>
-        <p
-          onClick={() => router.push(`/groups/${id}/settings`)}
-          className="group-details-sidebar-menu"
-        >
-          Edits
-        </p>
+        {data?.IsCurrentUserManager && (
+          <p
+            onClick={() => router.push(`/groups/${id}/settings`)}
+            className="group-details-sidebar-menu"
+          >
+            Edits
+          </p>
+        )}
       </div>
     </div>
   );
