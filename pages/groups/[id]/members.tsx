@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Login from "../../../src/components/Login/Login";
 import MemberDetails from "../../../src/components/Reused/MemberDetails/MemberDetails";
 import { getGroupDetails } from "../../../src/request/getGroupDetails";
+import { token } from "../../../src/utils/utils";
 
 const MembersPage = ({id }: any) => {
   const [count, setCount] = useState(0);
@@ -12,7 +13,6 @@ const MembersPage = ({id }: any) => {
   const [data, setData] = useState<any>(null);
 
   const { globalAccessToken } = useSelector((state: any) => state.user);
-  const token = typeof window !== 'undefined' && localStorage.getItem("ga_token");
   const router = useRouter();
   // const { id } = router.query;
 
@@ -45,8 +45,6 @@ const MembersPage = ({id }: any) => {
   }, []);
 
   useEffect(() => {
-    const token =
-      typeof window !== undefined && localStorage.getItem("ga_token");
     const res = getGroupDetails(token, id);
     res.then((result) => setData(result));
   }, []);

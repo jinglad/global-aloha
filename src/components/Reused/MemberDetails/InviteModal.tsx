@@ -8,9 +8,10 @@ import Loader from "../Loader/Loader";
 type FilterPropsType = {
   open: boolean;
   onClose: () => void;
+  fetchData: () => void;
 };
 
-const InviteModal = ({ open, onClose }: FilterPropsType) => {
+const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
   const [term, setTerm] = useState("");
   const { globalAccessToken, user, profile } = useSelector(
     (state: any) => state.user
@@ -24,7 +25,7 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
   const {id} = router.query;
 
   const handleOk = async () => {
-    const response = await fetch(`https://gagroupservice.saasms.com/api/v1/group/${id}/collections`, {
+    const response = await fetch(`https://api-gagroupservice-dev.saams.xyz/api/v1/group/${id}/collections`, {
       method: "POST",
       headers: {
         "content-type":"application/json",
@@ -34,8 +35,8 @@ const InviteModal = ({ open, onClose }: FilterPropsType) => {
     })
 
     if(response.ok) {
-      const res = await response.json();
-      console.log({inviteResult: res});
+      setInvite(null);
+      fetchData();
     }
   };
 

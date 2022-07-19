@@ -16,7 +16,7 @@ const Card = ({ item, type, myGroup }: PropsType) => {
       onClick={() =>
         type === "groups"
           ? router.push(`/groups/${item.Id}/overview`)
-          : router.push(`library/${item.Id}`)
+          : router.push(`library/${item.ActivityId}/overview`)
       }
     >
       <div className="h-60">

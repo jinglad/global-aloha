@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
+import { token } from "../../../utils/utils";
 import SearchModal from "../SearchModal/SearchModal";
 
 const AppHeader = () => {
@@ -19,11 +20,27 @@ const AppHeader = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const logOut = () => {
-    dispatch(setAccessToken(""));
-    dispatch(setUser(null));
-    dispatch(setProfile(null));
-    router.push("/login");
+  const logOut = async () => {
+    const response = await fetch(
+      `https://api-userservice-dev.saams.xyz/v2/logout`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ Token: token }),
+      }
+    );
+
+    if (response.ok) {
+      {
+        dispatch(setAccessToken(""));
+        dispatch(setUser(null));
+        dispatch(setProfile(null));
+        router.push("/login");
+      }
+    }
   };
 
   return (
@@ -39,7 +56,10 @@ const AppHeader = () => {
           </div>
           <div className="flex items-center">
             <div className="flex items-center mr-5">
-              <div className="mr-4 cursor-pointer" onClick={() => setOpen(true)}>
+              <div
+                className="mr-4 cursor-pointer"
+                onClick={() => setOpen(true)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"

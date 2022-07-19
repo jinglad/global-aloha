@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import GroupDetails from "../../../src/components/Groups/GroupDetails";
-import Login from "../../../src/components/Login/Login";
 import { getGroupDetails } from "../../../src/request/getGroupDetails";
+import { isBrowser } from "../../../src/utils/utils";
 
 type propsType = {
   // data: any;
@@ -13,25 +12,15 @@ type propsType = {
 const OverviewPage = ({ id }: propsType) => {
   const [data, setData] = useState<any>(null);
 
-  const { globalAccessToken } = useSelector((state: any) => state.user);
-
   const router = useRouter();
-  // const { id } = router.query;
-
-  // console.log(id);
 
   useEffect(() => {
-    const token =
-      typeof window !== undefined && localStorage.getItem("ga_token");
+    const token = isBrowser && localStorage.getItem("ga_token");
     const res = getGroupDetails(token, id);
     res.then((result) => setData(result));
   }, []);
 
-  return (
-    <>
-      <GroupDetails data={data} />
-    </>
-  );
+  return <GroupDetails data={data} />;
 };
 
 export default OverviewPage;

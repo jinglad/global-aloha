@@ -9,7 +9,6 @@ export const getCollection = async (token:any, groupId: any) => {
 
     if(response.ok) {
         const res = await response.json();
-        console.log(res);
         return res;
     }
 }

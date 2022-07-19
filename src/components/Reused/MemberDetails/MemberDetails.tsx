@@ -4,6 +4,7 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import GroupSidebar from "../../Groups/GroupSidebar";
 import DetailsHeader from "../DetailsHeader/DetailsHeader";
+import ActionModal from "./ActionModal";
 import InviteModal from "./InviteModal";
 
 type PropsType = {
@@ -22,10 +23,12 @@ const MemberDetails = ({
   total,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
+  const [actionOpen, setActionOpen] = useState(false);
 
   // console.log({data});
 
   const onClose = () => setOpen(false);
+  const onActionClose = () => setActionOpen(false);
 
   const columns: ColumnsType<any> = [
     {
@@ -48,7 +51,9 @@ const MemberDetails = ({
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {data?.IsCurrentUserManager && <Button type="primary">Action</Button>}
+          {data?.IsCurrentUserManager && <Button type="primary" onClick={() => {
+            setActionOpen(true);
+          }}>Action</Button>}
         </Space>
       ),
     },
@@ -95,6 +100,16 @@ const MemberDetails = ({
       <div className="w-3/5 mx-auto mt-5">
         <div>
           <DetailsHeader data={data} />
+          {data?.IsCurrentUserManager && (
+            <div className="my-3 text-right">
+              <button
+                onClick={() => setOpen(true)}
+                className="py-2 px-3 bg-lime-300 hover:bg-lime-400 rounded text-white"
+              >
+                Invite
+              </button>
+            </div>
+          )}
           <div className="relative flex">
             <div>
               <GroupSidebar data={data} />
@@ -118,7 +133,8 @@ const MemberDetails = ({
           </div>
         </div>
       </div>
-      <InviteModal open={open} onClose={onClose} />
+      <InviteModal open={open} onClose={onClose} fetchData={fetchData}/>
+      <ActionModal open={actionOpen} onClose={onActionClose} />
     </>
   );
 };
