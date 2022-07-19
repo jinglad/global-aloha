@@ -19,7 +19,7 @@ export const getGroupsList = async (
       },
     }
   );
-
+  
   setLoading(false);
 
   if (response.ok) {
