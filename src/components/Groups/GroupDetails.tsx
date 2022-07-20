@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getCollection } from "../../request/getCollection";
 import { getRoles } from "../../request/getRoles";
+import { token } from "../../utils/utils";
 import DetailsHeader from "../Reused/DetailsHeader/DetailsHeader";
 import GroupSidebar from "./GroupSidebar";
 
@@ -19,6 +20,7 @@ const GroupDetails = ({ data }: propsType) => {
   const [student, setStudent] = useState([]);
   const [influencer, setInfluencer] = useState([]);
   const [observer, setObserver] = useState([]);
+  const [description, setDescription] = useState<any>(null);
   // const [roles, setRoles] = useState<any>(null);
   const router = useRouter();
   const { id } = router.query;
@@ -35,8 +37,6 @@ const GroupDetails = ({ data }: propsType) => {
   // }, [globalAccessToken]);
 
   useEffect(() => {
-    const token =
-      typeof window !== "undefined" && localStorage.getItem("ga_token");
     const newData = getCollection(token, data?.GroupId);
     newData.then((res) => {
       const newRes = res?.flat();
@@ -49,6 +49,8 @@ const GroupDetails = ({ data }: propsType) => {
       setInfluencer(newInfluencer);
       setObserver(newObserver);
     });
+    // const newDes = data?.Properties((item:any) => item.Key === "description");
+    // setDescription(newDes);
   }, [data]);
 
   return (
@@ -68,7 +70,7 @@ const GroupDetails = ({ data }: propsType) => {
             <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2 mt-3">
               <div>
                 <h4 className="text-lg font-bold">Group Description</h4>
-                <p className="m-0">{data?.Properties?.[7]?.Value}</p>
+                <p className="m-0">{description?.Value}</p>
               </div>
               <SingleOverview title="Group Advisor" items={advisor} />
               <SingleOverview title="Group Student" items={student} />

@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import useToken from "../../../hooks/useToken";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
-import { token } from "../../../utils/utils";
+import { userservice } from "../../../services/userservice";
 import SearchModal from "../SearchModal/SearchModal";
 
 const AppHeader = () => {
   const [open, setOpen] = useState(false);
+  const token = useToken();
 
   const onClose = () => {
     setOpen(false);
@@ -22,14 +24,14 @@ const AppHeader = () => {
 
   const logOut = async () => {
     const response = await fetch(
-      `https://api-userservice-dev.saams.xyz/v2/logout`,
+      `${userservice}/v2/logout`,
       {
         method: "POST",
         headers: {
           "content-type": "application/json",
           authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ Token: token }),
+        body: JSON.stringify({ Token: token || globalAccessToken }),
       }
     );
 
@@ -90,7 +92,7 @@ const AppHeader = () => {
                 </Link>
               </div>
             </div>
-            {globalAccessToken ? (
+            {token ? (
               <div>
                 <Popover
                   className="cursor-pointer"

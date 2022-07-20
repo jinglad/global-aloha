@@ -1,0 +1,1 @@
+export const gagroupservice = "https://api-gagroupservice-dev.saams.xyz";

@@ -1,4 +1,5 @@
 import { setGroupCount, setGroups } from "../Redux/librarySlice";
+import { gagroupservice } from "../services/gagroupservice";
 
 const applicationId = "e1e0322c-acb0-4a24-958c-23b2ad912a2c";
 const tenantId = "af3baf1d-7aae-462c-9d1e-051cef459b86";
@@ -11,7 +12,7 @@ export const getGroupsList = async (
 ) => {
   setLoading(true);
   const response = await fetch(
-    `https://api-gagroupservice-dev.saams.xyz/api/v1/group/library?pageIndex=${pageIndex}&pageSize=${pageSize}&applicationId=${applicationId}&tenantId=${tenantId}`,
+    `${gagroupservice}/api/v1/group/library?pageIndex=${pageIndex}&pageSize=${pageSize}&applicationId=${applicationId}&tenantId=${tenantId}`,
     {
       method: "GET",
       headers: {
@@ -19,9 +20,7 @@ export const getGroupsList = async (
       },
     }
   );
-  
   setLoading(false);
-
   if (response.ok) {
     const res = await response.json();
     dispatch(setGroups(res.Groups));

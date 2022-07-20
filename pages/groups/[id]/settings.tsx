@@ -1,14 +1,14 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import Settings from '../../../src/components/Reused/Settings/Settings';
+import useToken from '../../../src/hooks/useToken';
 import { getGroupDetails } from '../../../src/request/getGroupDetails';
-import { token } from '../../../src/utils/utils';
+
 
 const SettingsPage = ({id}:any) => {
-  const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [update, setUpdate] = useState(1);
+  const token =  useToken();
 
   useEffect(() => {
     const res = getGroupDetails(token, id);

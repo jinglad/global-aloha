@@ -1,0 +1,1 @@
+export const userservice = "https://api-userservice-dev.saams.xyz";

@@ -12,7 +12,7 @@ type LibraryProps = {
 const Library: React.FC<LibraryProps> = ({ categories }) => {
   const [categoryTitle, setCategory] = useState("");
   const [page, setPage] = useState(0);
-  const [availableCategory, setAvailableCategory] = useState(categories);
+  const [availableCategory, setAvailableCategory] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

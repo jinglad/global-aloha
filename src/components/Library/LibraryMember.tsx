@@ -1,11 +1,11 @@
 import { Button, Pagination, PaginationProps, Space } from "antd";
-import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
+import Table, { ColumnsType } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import GroupSidebar from "../../Groups/GroupSidebar";
-import DetailsHeader from "../DetailsHeader/DetailsHeader";
-import ActionModal from "./ActionModal";
-import InviteModal from "./InviteModal";
+import GroupSidebar from "../Groups/GroupSidebar";
+import ActionModal from "../Reused/MemberDetails/ActionModal";
+import InviteModal from "../Reused/MemberDetails/InviteModal";
+import LibraryDetailsHeader from "./LibraryDetailsHeader";
 
 type PropsType = {
   collection: any;
@@ -16,21 +16,20 @@ type PropsType = {
   type?: string;
 };
 
-const MemberDetails = ({
+const LibraryMember = ({
   collection,
   data,
   fetchData,
   loading,
   total,
-  type
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
 
-  // console.log({data});
-
   const onClose = () => setOpen(false);
   const onActionClose = () => setActionOpen(false);
+
+  // console.log({data});
 
   const columns: ColumnsType<any> = [
     {
@@ -44,18 +43,20 @@ const MemberDetails = ({
       key: "member_type",
     },
     {
-      title: "Joining Date",
-      dataIndex: "joining_date",
-      key: "joining_date",
-    },
-    {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {data?.IsCurrentUserManager && <Button type="primary" onClick={() => {
-            setActionOpen(true);
-          }}>Action</Button>}
+          {data?.HasManagerPrivileges && (
+            <Button
+              type="primary"
+              onClick={() => {
+                setActionOpen(true);
+              }}
+            >
+              Action
+            </Button>
+          )}
         </Space>
       ),
     },
@@ -65,7 +66,7 @@ const MemberDetails = ({
 
   const [tableData, setTableData] = useState<any>([]);
   const [current, setCurrent] = useState<number>(0);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<number>(0);
 
   // console.log(setPage);
 
@@ -80,30 +81,29 @@ const MemberDetails = ({
 
   useEffect(() => {
     const newArray = [];
-      for (let i = 0; i < collection.length; i++) {
-        const element = collection[i];
-        let newData: any = {
-          id: element.CollectionId,
-          name: element.Name,
-          member_type: element.RoleName,
-          joining_date: new Date(element.JoinedDate).toDateString(),
-        };
-        newArray.push(newData);
-      }
+    for (let i = 0; i < collection?.length; i++) {
+      const element = collection[i];
+      let newData: any = {
+        id: element.UserId,
+        name: element.Name,
+        member_type: "",
+      };
+      newArray.push(newData);
+    }
     setTableData(newArray);
   }, [collection]);
-
-  // console.log({ data });
 
   return (
     <>
       <Head>
-        <title>Global Aloha | {data?.title}</title>
+        <title>Global Aloha | {data?.Name}</title>
       </Head>
       <div className="w-3/5 mx-auto mt-5">
         <div>
-          <DetailsHeader data={data} />
-          {data?.IsCurrentUserManager || data?.HasManagerPrivileges && (
+          <div>
+            <LibraryDetailsHeader data={data} />
+          </div>
+          {data?.HasManagerPrivileges && (
             <div className="my-3 text-right">
               <button
                 onClick={() => setOpen(true)}
@@ -136,10 +136,10 @@ const MemberDetails = ({
           </div>
         </div>
       </div>
-      <InviteModal open={open} onClose={onClose} fetchData={fetchData}/>
-      <ActionModal open={actionOpen} onClose={onActionClose} />
+      {/* <InviteModal open={open} onClose={onClose} fetchData={fetchData} /> */}
+      {/* <ActionModal open={actionOpen} onClose={onActionClose} /> */}
     </>
   );
 };
 
-export default MemberDetails;
+export default LibraryMember;

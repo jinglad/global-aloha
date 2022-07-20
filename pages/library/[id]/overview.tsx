@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import LibraryDetails from '../../../src/components/Library/LibraryDetails';
+import useToken from '../../../src/hooks/useToken';
 import { getLibraryDetails } from '../../../src/request/getLibraryDetails';
 
 type PropsType = {
@@ -8,14 +9,15 @@ type PropsType = {
 
 const LibraryOverviewPage = ({id}:PropsType) => {
   const [data, setData] = useState<any>(null);
+  const token = useToken();
 
   useEffect(() => {
-    const result = getLibraryDetails(id);
+    const result = getLibraryDetails(id, token);
     result.then((res) => setData(res))
   },[])
 
   return (
-    <h1>Library Details</h1>
+    <LibraryDetails data={data} />
   )
 }
 

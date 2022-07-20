@@ -4,11 +4,12 @@ import React from "react";
 
 type PropsType = {
   item: any;
-  type:string;
+  type: string;
   myGroup?: boolean;
-}
+  myLibrary?: boolean;
+};
 
-const Card = ({ item, type, myGroup }: PropsType) => {
+const Card = ({ item, type, myGroup, myLibrary }: PropsType) => {
   const router = useRouter();
   return (
     <div
@@ -16,7 +17,9 @@ const Card = ({ item, type, myGroup }: PropsType) => {
       onClick={() =>
         type === "groups"
           ? router.push(`/groups/${item.Id}/overview`)
-          : router.push(`library/${item.ActivityId}/overview`)
+          : myLibrary
+          ? router.push(`/library/${item.Id}/overview`)
+          : router.push(`/library/${item.ActivityId}/overview`)
       }
     >
       <div className="h-60">
