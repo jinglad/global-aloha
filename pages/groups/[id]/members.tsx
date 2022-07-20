@@ -51,7 +51,7 @@ const MembersPage = ({id }: any) => {
 
   return (
     <>
-      {globalAccessToken ? (
+      {token ? (
         <MemberDetails
           data={data}
           collection={collection}

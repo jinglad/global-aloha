@@ -79,7 +79,7 @@ const MyActivity = () => {
         </div>
         <div className="mt-5 grid xl:grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {library?.map((item: any) => (
-            <Card key={item.Id} item={item} type="library" />
+            <Card key={item.Id} item={item} type="library" myLibrary={true} />
           ))}
           {library?.length === 0 && (
             <h3 className="col-span-full font-bold text-center text-xl">

@@ -1,8 +1,9 @@
-import { Button, Modal, Radio, RadioChangeEvent } from "antd";
+import { Button, Modal } from "antd";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getRoles } from "../../../request/getRoles";
+import { token } from "../../../utils/utils";
 import Loader from "../Loader/Loader";
 
 type FilterPropsType = {
@@ -29,7 +30,7 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
       method: "POST",
       headers: {
         "content-type":"application/json",
-        "authorization": `Bearer ${globalAccessToken}`
+        "authorization": `Bearer ${token}`
       },
       body: JSON.stringify(invite)
     })
@@ -48,7 +49,7 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
         method: "GET",
         headers: {
           "content-type": "application/json",
-          Authorization: `Bearer ${globalAccessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );

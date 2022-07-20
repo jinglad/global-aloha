@@ -1,5 +1,7 @@
+import { globalalohaservice } from "../services/globalalohaservice";
+
 export const getCollection = async (token:any, groupId: any) => {
-    const response = await fetch(`https://api-gagroupservice-dev.saams.xyz/api/v1/group/${groupId}/collections`, {
+    const response = await fetch(`${globalalohaservice}/${groupId}/collections`, {
         method: 'GET',
         headers: {
             "content-type":"application/json",

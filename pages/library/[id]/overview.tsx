@@ -15,7 +15,7 @@ const LibraryOverviewPage = ({id}:PropsType) => {
   },[])
 
   return (
-    <h1>Library Details</h1>
+    <LibraryDetails data={data} />
   )
 }
 
