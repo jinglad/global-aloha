@@ -5,6 +5,9 @@ type PropsTypes = {
   groups: any;
   count: Number;
   groupCount: Number;
+  myLibrary: any;
+  myGroup: any;
+  searchKey: string;
 }
 
 const initialState: PropsTypes = {
@@ -12,6 +15,9 @@ const initialState: PropsTypes = {
   groups: [],
   count: 0,
   groupCount: 0,
+  myLibrary: [],
+  myGroup: [],
+  searchKey: "",
 }
 
 const librarySlice = createSlice({
@@ -29,10 +35,19 @@ const librarySlice = createSlice({
     }, 
     setGroupCount: (state, action) => {
       state.count = action.payload;
+    }, 
+    setMyLibrary: (state, action) => {
+      state.myLibrary = action.payload;
+    },
+    setMyGroup: (state, action) => {
+      state.myGroup = action.payload;
+    },
+    setSearchKey: (state, action) => {
+      state.searchKey = action.payload;
     }
   }
 })
 
-export const { setLibraryList, setCount, setGroups, setGroupCount } = librarySlice.actions;
+export const { setLibraryList, setCount, setGroups, setGroupCount, setMyLibrary, setMyGroup, setSearchKey } = librarySlice.actions;
 
 export default librarySlice.reducer;

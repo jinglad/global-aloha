@@ -70,7 +70,7 @@ const Groups = () => {
         ) : (
           <div className="grid xl:grid-cols-4 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {groups?.map((item: any) => {
-              return <Card key={item.ActivityId} item={item} />;
+              return <Card key={item.ActivityId} item={item} type="groups" />;
             })}
           </div>
         )}

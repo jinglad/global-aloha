@@ -23,4 +23,7 @@ a {
   .login-input {
     @apply bg-sky-50 rounded outline-none p-2 w-3/4;
   }
+  .group-details-sidebar-menu {
+    @apply m-0 font-semibold text-center border-b-2 border-gray-300 text-base cursor-pointer hover:bg-blue-400 rounded p-2 hover:text-white mb-2;
+  }
 }

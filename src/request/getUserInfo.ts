@@ -33,6 +33,6 @@ export const getUserInfo = async (dispatch: any, token: string, router:any) => {
   if (response.ok) {
     const res = await response.json();
     dispatch(setUser(res));
-    getProfile(res.ApplicationId, res.UserId, token, dispatch, router);
+    getProfile(res?.ApplicationId, res?.UserId, token, dispatch, router);
   }
 };
