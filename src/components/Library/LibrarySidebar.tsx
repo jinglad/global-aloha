@@ -1,27 +1,26 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-const GroupSidebar = ({ data, type }: any) => {
+const LibrarySidebar = ({ data }: any) => {
   const router = useRouter();
   const { id } = router.query;
-
   return (
     <div className="bg-gray-200 w-60 mt-5 p-3">
       <p
-        onClick={() => router.push(`/groups/${id}/overview`)}
+        onClick={() => router.push(`/library/${id}/overview`)}
         className="group-details-sidebar-menu"
       >
-        Overview
+        Summery
       </p>
       <p
-        onClick={() => router.push(`/groups/${id}/members`)}
+        onClick={() => router.push(`/library/${id}/members`)}
         className="group-details-sidebar-menu"
       >
         Members
       </p>
-      {data?.IsCurrentUserManager && (
+      {data?.HasManagerPrivileges && (
         <p
-          onClick={() => router.push(`/groups/${id}/settings`)}
+          onClick={() => router.push(`/library/${id}/settings`)}
           className="group-details-sidebar-menu"
         >
           Edits
@@ -31,4 +30,4 @@ const GroupSidebar = ({ data, type }: any) => {
   );
 };
 
-export default GroupSidebar;
+export default LibrarySidebar;

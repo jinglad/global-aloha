@@ -7,13 +7,13 @@ import { getBatchMembers } from "../../request/getBatchMembers";
 import { globalalohaservice } from "../../services/globalalohaservice";
 import GroupSidebar from "../Groups/GroupSidebar";
 import LibraryDetailsHeader from "./LibraryDetailsHeader";
+import LibrarySidebar from "./LibrarySidebar";
 
 const LibraryDetails = ({ data }: any) => {
   const [slogan, setSlogan] = useState<any>(null);
   const [leaderShip, setLeaderShip] = useState<any>(null);
   const [batchMember, setBatchMember] = useState<any>(null);
   const token = useToken();
-  const [activityRole, setActivityRole] = useState<any>(null);
 
   useEffect(() => {
     const newProp = data?.Properties?.find(
@@ -30,27 +30,6 @@ const LibraryDetails = ({ data }: any) => {
     member.then((res) => setBatchMember(res));
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log("activity role", `${globalalohaservice}/activityroles`)
-  //   fetch(`${globalalohaservice}/activityroles`,{
-  //     method: "GET",
-  //     headers: {
-  //       "content-type":"application/json",
-  //       authorization: `Bearer ${token}`
-  //     }
-  //   })
-  //   .then(res => {
-  //     if(res.ok) {
-  //       return res.json();
-  //     }
-  //   })
-  //   .then(data => {
-  //     console.log({activityRole:data})
-  //     setActivityRole(data);
-  //   })
-  //   .catch(err => console.log(err));
-  // },[data])
-
   return (
     <>
       <Head>
@@ -60,7 +39,7 @@ const LibraryDetails = ({ data }: any) => {
         <LibraryDetailsHeader data={data} />
         <div className="flex">
           <div>
-            <GroupSidebar data={data} type="library" />
+            <LibrarySidebar data={data} />
           </div>
           <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2 mt-3 w-2/4">
             <div>

@@ -6,21 +6,18 @@ const DetailsHeader = ({ data, type }: any) => {
   const [slogan, setSlogan] = useState<any>(null);
 
   useEffect(() => {
-    if (type == "library") {
-    } else {
-      const newBanner = data?.Properties?.find(
-        (item: any) => item.Key === "bannerImage"
-      );
-      setBanner(newBanner);
-      const newProfileImg = data?.Properties?.find(
-        (item: any) => item.Key === "profileImage"
-      );
-      setProfileImg(newProfileImg);
-      const newSlogan = data?.Properties?.find(
-        (item: any) => item.Key === "visionHeadline"
-      );
-      setSlogan(newSlogan);
-    }
+    const newBanner = data?.Properties?.find(
+      (item: any) => item.Key === "bannerImage"
+    );
+    setBanner(newBanner);
+    const newProfileImg = data?.Properties?.find(
+      (item: any) => item.Key === "profileImage"
+    );
+    setProfileImg(newProfileImg);
+    const newSlogan = data?.Properties?.find(
+      (item: any) => item.Key === "visionHeadline"
+    );
+    setSlogan(newSlogan);
   }, [data]);
 
   return (

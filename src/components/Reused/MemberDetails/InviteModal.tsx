@@ -53,12 +53,11 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
         },
       }
     );
-
     setsearchLoader(false);
-
     if (response.ok) {
       const res = await response.json();
       setResult(res);
+      // console.log({res});
       setTerm("");
     }
   };
@@ -145,7 +144,7 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
                       Photo: item.profilePhoto || "",
                       Roles: [],
                       Subject: `Invitation from ${profile.firstName} to Join Publish ${item.firstName}`,
-                      UserId: item.id,
+                      UserId: item.userId,
                     });
                     setInvite(newItem);
                     setResult([]);

@@ -14,7 +14,7 @@ const LibraryOverviewPage = ({id}:PropsType) => {
   useEffect(() => {
     const result = getLibraryDetails(id, token);
     result.then((res) => setData(res))
-  },[])
+  },[token])
 
   return (
     <LibraryDetails data={data} />

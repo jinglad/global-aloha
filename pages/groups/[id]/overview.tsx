@@ -15,8 +15,11 @@ const OverviewPage = ({ id }: propsType) => {
 
   useEffect(() => {
     const res = getGroupDetails(token, id);
-    res.then((result) => setData(result));
-  }, []);
+    res.then((result) => {
+      setData(result);
+      // console.log({result})
+    });
+  }, [token]);
 
   return <GroupDetails data={data} />;
 };

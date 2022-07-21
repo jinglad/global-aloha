@@ -8,6 +8,7 @@ import useToken from "../../../hooks/useToken";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
 import { userservice } from "../../../services/userservice";
 import SearchModal from "../SearchModal/SearchModal";
+import {BellOutlined} from "@ant-design/icons"
 
 const AppHeader = () => {
   const [open, setOpen] = useState(false);
@@ -93,7 +94,15 @@ const AppHeader = () => {
               </div>
             </div>
             {token ? (
-              <div>
+              <div className="flex items-center">
+                <div className="mr-3">
+                  <Link href="/notifications">
+                    <a className="">
+                    <BellOutlined style={{ fontSize: '20px', color: 'black' }} />
+                    </a>
+                  </Link>
+                </div>
+                <div>
                 <Popover
                   className="cursor-pointer"
                   placement="bottomRight"
@@ -144,6 +153,7 @@ const AppHeader = () => {
                     />
                   </div>
                 </Popover>
+              </div>
               </div>
             ) : (
               <div>

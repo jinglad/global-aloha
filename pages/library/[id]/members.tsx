@@ -15,7 +15,7 @@ const members = ({ id }: any) => {
   const getLibraryMembers = async (page = 0) => {
     setLoading(true);
     const response = await fetch(
-      `${globalalohaservice}/${id}/members?memberStatuses=2&memberStatuses=5&memberStatuses=0&pageIndex=${page}&pageSize=10&searchTerm=`,
+      `${globalalohaservice}/v1/activity/${id}/members?memberStatuses=2&memberStatuses=5&memberStatuses=0&pageIndex=${page}&pageSize=10&searchTerm=`,
       {
         method: "GET",
         headers: {
@@ -32,14 +32,16 @@ const members = ({ id }: any) => {
     }
   };
 
-  useEffect(() => {
-    getLibraryMembers();
-  }, [id]);
+  // useEffect(() => {
+  //   getLibraryMembers();
+  // }, [id, token]);
 
   useEffect(() => {
     const result = getLibraryDetails(id, token);
     result.then((res) => setData(res));
-  }, [id]);
+    
+    getLibraryMembers();
+  }, [id, token]);
 
   return (
     <>

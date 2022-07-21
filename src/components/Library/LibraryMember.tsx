@@ -2,10 +2,13 @@ import { Button, Pagination, PaginationProps, Space } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
+import useToken from "../../hooks/useToken";
+import { globalalohaservice } from "../../services/globalalohaservice";
 import GroupSidebar from "../Groups/GroupSidebar";
 import ActionModal from "../Reused/MemberDetails/ActionModal";
 import InviteModal from "../Reused/MemberDetails/InviteModal";
 import LibraryDetailsHeader from "./LibraryDetailsHeader";
+import LibrarySidebar from "./LibrarySidebar";
 
 type PropsType = {
   collection: any;
@@ -25,11 +28,12 @@ const LibraryMember = ({
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
+  const token = useToken();
 
   const onClose = () => setOpen(false);
   const onActionClose = () => setActionOpen(false);
 
-  // console.log({data});
+  console.log({data});
 
   const columns: ColumnsType<any> = [
     {
@@ -67,6 +71,7 @@ const LibraryMember = ({
   const [tableData, setTableData] = useState<any>([]);
   const [current, setCurrent] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
+  const [activityRole, setActivityRole] = useState<any>(null);
 
   // console.log(setPage);
 
@@ -76,6 +81,25 @@ const LibraryMember = ({
   };
 
   useEffect(() => {
+    fetch(`${globalalohaservice}/v1/activity/activityroles`,{
+      method: "GET",
+      headers: {
+        "content-type":"application/json",
+        authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      if(res.ok) {
+        return res.json();
+      }
+    })
+    .then(data => {
+      setActivityRole(data);
+    })
+    .catch(err => console.log(err));
+  },[token])
+
+  useEffect(() => {
     fetchData(page);
   }, [page]);
 
@@ -83,15 +107,19 @@ const LibraryMember = ({
     const newArray = [];
     for (let i = 0; i < collection?.length; i++) {
       const element = collection[i];
+
+      const roleDetails = activityRole?.find((role:any) => role.Id === element.Roles[0].RoleId);
       let newData: any = {
         id: element.UserId,
         name: element.Name,
-        member_type: "",
+        member_type: roleDetails?.RoleName,
       };
       newArray.push(newData);
     }
     setTableData(newArray);
   }, [collection]);
+
+  
 
   return (
     <>
@@ -115,7 +143,7 @@ const LibraryMember = ({
           )}
           <div className="relative flex">
             <div>
-              <GroupSidebar data={data} />
+              <LibrarySidebar data={data} />
             </div>
             <div className="ml-10 border-l-2 border-gray-200 pl-2 pb-2 w-full">
               <Table

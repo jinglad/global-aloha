@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react'
-import Settings from '../../../src/components/Reused/Settings/Settings';
+import LibrarySettings from '../../../src/components/Library/LibrarySettings';
 import useToken from '../../../src/hooks/useToken';
-import { getGroupDetails } from '../../../src/request/getGroupDetails';
+import { getLibraryDetails } from '../../../src/request/getLibraryDetails';
 
 
 const SettingsPage = ({id}:any) => {
@@ -12,19 +12,19 @@ const SettingsPage = ({id}:any) => {
   const token =  useToken();
 
   useEffect(() => {
-    const res = getGroupDetails(token, id);
+    const res = getLibraryDetails(id, token);
     res.then((result) => {
       setData(result);
-      if(!result.IsCurrentUserManager && token) Router.push(`/groups/${id}/overview`);
+      if(!result.HasManagerPrivileges && token) Router.push(`/library/${id}/overview`);
     });
   }, [update, token]);
 
   return (
     <>
     <Head>
-      <title>Global Aloha | {data?.Title}</title>
+      <title>Global Aloha | {data?.Name}</title>
     </Head>
-    <Settings data={data} setUpdate={setUpdate} />
+    <LibrarySettings data={data} setUpdate={setUpdate} />
     </>
   )
 }

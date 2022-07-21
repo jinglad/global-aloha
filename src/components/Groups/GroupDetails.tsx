@@ -49,8 +49,10 @@ const GroupDetails = ({ data }: propsType) => {
       setInfluencer(newInfluencer);
       setObserver(newObserver);
     });
-    // const newDes = data?.Properties((item:any) => item.Key === "description");
-    // setDescription(newDes);
+    const newDes = data?.Properties?.find((item:any) => item.Key === "description");
+    setDescription(newDes);
+
+    // console.log(data.Properties)
   }, [data]);
 
   return (

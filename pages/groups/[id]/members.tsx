@@ -42,7 +42,7 @@ const MembersPage = ({id }: any) => {
   useEffect(() => {
     const res = getGroupDetails(token, id);
     res.then((result) => setData(result));
-  }, []);
+  }, [token]);
 
   return (
     <>

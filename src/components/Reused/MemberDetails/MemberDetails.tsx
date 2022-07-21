@@ -2,7 +2,10 @@ import { Button, Pagination, PaginationProps, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
+import useToken from "../../../hooks/useToken";
+import { gagroupservice } from "../../../services/gagroupservice";
 import GroupSidebar from "../../Groups/GroupSidebar";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import DetailsHeader from "../DetailsHeader/DetailsHeader";
 import ActionModal from "./ActionModal";
 import InviteModal from "./InviteModal";
@@ -22,15 +25,22 @@ const MemberDetails = ({
   fetchData,
   loading,
   total,
-  type
+  type,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selected, setSelected] = useState<any>(null);
+  const token = useToken();
+  const [tableData, setTableData] = useState<any>([]);
+  const [current, setCurrent] = useState<number>(0);
+  const [page, setPage] = useState(0);
 
   // console.log({data});
 
   const onClose = () => setOpen(false);
   const onActionClose = () => setActionOpen(false);
+  const onDeleteClose = () => setDeleteModal(false);
 
   const columns: ColumnsType<any> = [
     {
@@ -53,19 +63,38 @@ const MemberDetails = ({
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {data?.IsCurrentUserManager && <Button type="primary" onClick={() => {
-            setActionOpen(true);
-          }}>Action</Button>}
+          {data?.IsCurrentUserManager && (
+            <>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setActionOpen(true);
+                  const obj = collection?.find(
+                    (item: any) => item.CollectionId === record.id
+                  );
+                  setSelected(obj);
+                  // console.log(obj)
+                }}
+              >
+                Action
+              </Button>
+              <Button
+                onClick={() => {
+                  setSelected(record);
+                  setDeleteModal(true);
+                }}
+                type="ghost"
+              >
+                Remove
+              </Button>
+            </>
+          )}
         </Space>
       ),
     },
   ];
 
   // console.log(collection);
-
-  const [tableData, setTableData] = useState<any>([]);
-  const [current, setCurrent] = useState<number>(0);
-  const [page, setPage] = useState(0);
 
   // console.log(setPage);
 
@@ -80,17 +109,18 @@ const MemberDetails = ({
 
   useEffect(() => {
     const newArray = [];
-      for (let i = 0; i < collection.length; i++) {
-        const element = collection[i];
-        let newData: any = {
-          id: element.CollectionId,
-          name: element.Name,
-          member_type: element.RoleName,
-          joining_date: new Date(element.JoinedDate).toDateString(),
-        };
-        newArray.push(newData);
-      }
+    for (let i = 0; i < collection.length; i++) {
+      const element = collection[i];
+      let newData: any = {
+        id: element.CollectionId,
+        name: element.Name,
+        member_type: element.RoleName,
+        joining_date: new Date(element.JoinedDate).toDateString(),
+      };
+      newArray.push(newData);
+    }
     setTableData(newArray);
+    // console.log(collection)
   }, [collection]);
 
   // console.log({ data });
@@ -103,7 +133,7 @@ const MemberDetails = ({
       <div className="w-3/5 mx-auto mt-5">
         <div>
           <DetailsHeader data={data} />
-          {data?.IsCurrentUserManager || data?.HasManagerPrivileges && (
+          {data?.IsCurrentUserManager && (
             <div className="my-3 text-right">
               <button
                 onClick={() => setOpen(true)}
@@ -136,8 +166,20 @@ const MemberDetails = ({
           </div>
         </div>
       </div>
-      <InviteModal open={open} onClose={onClose} fetchData={fetchData}/>
-      <ActionModal open={actionOpen} onClose={onActionClose} />
+      <InviteModal open={open} onClose={onClose} fetchData={fetchData} />
+      <ActionModal
+        open={actionOpen}
+        onClose={onActionClose}
+        selected={selected}
+      />
+      <DeleteModal
+        open={deleteModal}
+        onClose={onDeleteClose}
+        fetchData={fetchData}
+        selected={selected}
+        collection={collection}
+        page={page}
+      />
     </>
   );
 };
