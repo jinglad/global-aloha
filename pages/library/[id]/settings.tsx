@@ -1,23 +1,26 @@
 import Head from 'next/head';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import LibrarySettings from '../../../src/components/Library/LibrarySettings';
-import useToken from '../../../src/hooks/useToken';
 import { getLibraryDetails } from '../../../src/request/getLibraryDetails';
+import { redirectUnAuthenticatedSSR } from '../../../src/utils/utils';
 
 
-const SettingsPage = ({id}:any) => {
+const SettingsPage = () => {
   const [data, setData] = useState<any>(null);
   const [update, setUpdate] = useState(1);
-  const token =  useToken();
+  const {globalAccessToken:token} = useSelector((state:any) => state.user);
+  const router = useRouter();
+  const {id} = router.query;
 
   useEffect(() => {
     const res = getLibraryDetails(id, token);
     res.then((result) => {
       setData(result);
-      if(!result.HasManagerPrivileges && token) Router.push(`/library/${id}/overview`);
+      if(!result?.HasManagerPrivileges && token) router.push(`/library/${id}/overview`).then();
     });
-  }, [update, token]);
+  }, [update, token, id]);
 
   return (
     <>
@@ -31,12 +34,6 @@ const SettingsPage = ({id}:any) => {
 
 export default SettingsPage;
 
-export async function getServerSideProps({ params }: any) {
-  const { id } = params;
 
-  return {
-    props: {
-      id,
-    },
-  };
-}
+SettingsPage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

@@ -1,9 +1,12 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 
 const LibrarySidebar = ({ data }: any) => {
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {}, [id]);
+
   return (
     <div className="bg-gray-200 w-60 mt-5 p-3">
       <p

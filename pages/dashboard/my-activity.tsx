@@ -1,18 +1,12 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import Login from '../../src/components/Login/Login';
-import MyActivity from '../../src/components/MyActivity/MyActivity';
-import useToken from '../../src/hooks/useToken';
+import React from "react";
+import MyActivity from "../../src/components/MyActivity/MyActivity";
+import { redirectUnAuthenticatedSSR } from "../../src/utils/utils";
 
 const MyActivityPage = () => {
-  const token = useToken();
-  return (
-    <>
-        {
-            token ? <MyActivity /> : <Login />
-        }
-    </>
-  )
-}
+  return <MyActivity />;
+};
 
-export default MyActivityPage
+export default MyActivityPage;
+
+MyActivityPage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

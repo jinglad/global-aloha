@@ -72,7 +72,7 @@ const Search = () => {
           ) : (
             <>
               {searchResult?.Item1?.map((item: any) => (
-                <Card key={item.ModuleId} item={item} type="library" />
+                <Card key={item.ModuleId} item={item} type="search" />
               ))}
               {searchResult?.Item1?.length === 0 && (
                 <p className="text-center mt-20 col-span-full font-bold text-2xl">

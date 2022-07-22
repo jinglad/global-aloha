@@ -6,13 +6,16 @@ import MemberDetails from "../../../src/components/Reused/MemberDetails/MemberDe
 import useToken from "../../../src/hooks/useToken";
 import { getGroupDetails } from "../../../src/request/getGroupDetails";
 import { gagroupservice } from "../../../src/services/gagroupservice";
+import { redirectUnAuthenticatedSSR } from "../../../src/utils/utils";
 
-const MembersPage = ({id }: any) => {
+const MembersPage = () => {
   const [count, setCount] = useState(0);
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
-  const token = useToken();
+  const {globalAccessToken:token} = useSelector((state:any) => state.user); 
+  const router = useRouter();
+  const {id} = router.query;
 
   const getCollectionWithPagination = async (page = 0) => {
     setLoading(true);
@@ -37,7 +40,7 @@ const MembersPage = ({id }: any) => {
 
   useEffect(() => {
     getCollectionWithPagination();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const res = getGroupDetails(token, id);
@@ -45,30 +48,17 @@ const MembersPage = ({id }: any) => {
   }, [token]);
 
   return (
-    <>
-      {token ? (
-        <MemberDetails
-          data={data}
-          collection={collection}
-          fetchData={getCollectionWithPagination}
-          loading={loading}
-          total={count}
-        />
-      ) : (
-        <Login />
-      )}
-    </>
+    <MemberDetails
+      data={data}
+      collection={collection}
+      fetchData={getCollectionWithPagination}
+      loading={loading}
+      total={count}
+    />
   );
 };
 
 export default MembersPage;
 
-export async function getServerSideProps({ params }: any) {
-  const { id } = params;
-
-  return {
-    props: {
-      id,
-    },
-  };
-}
+MembersPage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

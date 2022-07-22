@@ -9,31 +9,53 @@ import ActionModal from "../Reused/MemberDetails/ActionModal";
 import InviteModal from "../Reused/MemberDetails/InviteModal";
 import LibraryDetailsHeader from "./LibraryDetailsHeader";
 import LibrarySidebar from "./LibrarySidebar";
+import { getLibraryDetails } from "../../../src/request/getLibraryDetails";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
-type PropsType = {
-  collection: any;
-  data: any;
-  fetchData: any;
-  loading: boolean;
-  total: number;
-  type?: string;
-};
+type PropsType = {};
 
-const LibraryMember = ({
-  collection,
-  data,
-  fetchData,
-  loading,
-  total,
-}: PropsType) => {
+const LibraryMember = ({}: PropsType) => {
+  const [members, setMembers] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(0);
+  const { globalAccessToken: token } = useSelector((state: any) => state.user);
+  const router = useRouter();
+  const { id } = router.query;
+
+  const getLibraryMembers = async (page = 0) => {
+    setLoading(true);
+    const response = await fetch(
+      `${globalalohaservice}/v1/activity/${id}/members?memberStatuses=2&memberStatuses=5&memberStatuses=0&pageIndex=${page}&pageSize=10&searchTerm=`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setLoading(false);
+    if (response.ok) {
+      const res = await response.json();
+      setMembers(res?.Items);
+      setCount(res?.Count);
+    }
+  };
+
+  useEffect(() => {
+    const result = getLibraryDetails(id, token);
+    result.then((res) => setData(res));
+
+    getLibraryMembers();
+  }, [id, token]);
+
   const [open, setOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
-  const token = useToken();
 
   const onClose = () => setOpen(false);
   const onActionClose = () => setActionOpen(false);
-
-  console.log({data});
 
   const columns: ColumnsType<any> = [
     {
@@ -81,34 +103,36 @@ const LibraryMember = ({
   };
 
   useEffect(() => {
-    fetch(`${globalalohaservice}/v1/activity/activityroles`,{
+    fetch(`${globalalohaservice}/v1/activity/activityroles`, {
       method: "GET",
       headers: {
-        "content-type":"application/json",
-        authorization: `Bearer ${token}`
-      }
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
     })
-    .then(res => {
-      if(res.ok) {
-        return res.json();
-      }
-    })
-    .then(data => {
-      setActivityRole(data);
-    })
-    .catch(err => console.log(err));
-  },[token])
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setActivityRole(data);
+      })
+      .catch((err) => console.log(err));
+  }, [token]);
 
   useEffect(() => {
-    fetchData(page);
+    getLibraryMembers(page);
   }, [page]);
 
   useEffect(() => {
     const newArray = [];
-    for (let i = 0; i < collection?.length; i++) {
-      const element = collection[i];
+    for (let i = 0; i < members?.length; i++) {
+      const element = members[i];
 
-      const roleDetails = activityRole?.find((role:any) => role.Id === element.Roles[0].RoleId);
+      const roleDetails = activityRole?.find(
+        (role: any) => role.Id === element.Roles[0].RoleId
+      );
       let newData: any = {
         id: element.UserId,
         name: element.Name,
@@ -117,9 +141,7 @@ const LibraryMember = ({
       newArray.push(newData);
     }
     setTableData(newArray);
-  }, [collection]);
-
-  
+  }, [members]);
 
   return (
     <>
@@ -157,14 +179,14 @@ const LibraryMember = ({
                   showSizeChanger={false}
                   current={current}
                   onChange={onChange}
-                  total={total}
+                  total={count}
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <InviteModal open={open} onClose={onClose} fetchData={fetchData} /> */}
+      {/* <InviteModal open={open} onClose={onClose} fetchData={getLibraryMembers} /> */}
       {/* <ActionModal open={actionOpen} onClose={onActionClose} /> */}
     </>
   );

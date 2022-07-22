@@ -7,11 +7,10 @@ import SignUp from "../src/components/Login/SignUp";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const {globalAccessToken} = useSelector((state:any) => state.user);
 
   useEffect(() => {
-    router.push(globalAccessToken ? "/dashboard/my-activity" : "/login");
-  },[globalAccessToken])
+    router.push("/dashboard/my-activity").then();
+  },[])
 
   return (
     <div>

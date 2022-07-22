@@ -8,11 +8,12 @@ import useToken from "../../../hooks/useToken";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
 import { userservice } from "../../../services/userservice";
 import SearchModal from "../SearchModal/SearchModal";
-import {BellOutlined} from "@ant-design/icons"
+import { BellOutlined } from "@ant-design/icons";
+import { useCookies } from "react-cookie";
 
 const AppHeader = () => {
   const [open, setOpen] = useState(false);
-  const token = useToken();
+  const [cookie, setCookie, removeCookie] = useCookies(["ga_token"]);
 
   const onClose = () => {
     setOpen(false);
@@ -24,24 +25,23 @@ const AppHeader = () => {
   const router = useRouter();
 
   const logOut = async () => {
-    const response = await fetch(
-      `${userservice}/v2/logout`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ Token: token || globalAccessToken }),
-      }
-    );
+    setCookie("ga_token", null);
+    const response = await fetch(`${userservice}/v2/logout`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${globalAccessToken}`,
+      },
+      body: JSON.stringify({ Token: globalAccessToken }),
+    });
 
     if (response.ok) {
       {
         dispatch(setAccessToken(""));
         dispatch(setUser(null));
         dispatch(setProfile(null));
-        router.push("/login");
+        removeCookie('ga_token');
+        router.push("/login").then();
       }
     }
   };
@@ -93,67 +93,69 @@ const AppHeader = () => {
                 </Link>
               </div>
             </div>
-            {token ? (
+            {globalAccessToken ? (
               <div className="flex items-center">
                 <div className="mr-3">
                   <Link href="/notifications">
                     <a className="">
-                    <BellOutlined style={{ fontSize: '20px', color: 'black' }} />
+                      <BellOutlined
+                        style={{ fontSize: "20px", color: "black" }}
+                      />
                     </a>
                   </Link>
                 </div>
                 <div>
-                <Popover
-                  className="cursor-pointer"
-                  placement="bottomRight"
-                  title={
-                    <div>
-                      <h5 className="text-md font-bold mb-0">
-                        {profile?.firstName} {profile?.lastName}
-                      </h5>
-                      <p className="m-0">
-                        <small className="text-gray-400 text-sm">
-                          {profile?.email}
-                        </small>
-                      </p>
-                    </div>
-                  }
-                  trigger="click"
-                  content={
-                    <div>
+                  <Popover
+                    className="cursor-pointer"
+                    placement="bottomRight"
+                    title={
                       <div>
-                        <Link href="/profile">
-                          <a className="text-black">Profile</a>
-                        </Link>
+                        <h5 className="text-md font-bold mb-0">
+                          {profile?.firstName} {profile?.lastName}
+                        </h5>
+                        <p className="m-0">
+                          <small className="text-gray-400 text-sm">
+                            {profile?.email}
+                          </small>
+                        </p>
                       </div>
+                    }
+                    trigger="click"
+                    content={
                       <div>
-                        <Link href="/dashboard/my-activity">
-                          <a className="text-black">My Activity</a>
-                        </Link>
+                        <div>
+                          <Link href="/profile">
+                            <a className="text-black">Profile</a>
+                          </Link>
+                        </div>
+                        <div>
+                          <Link href="/dashboard/my-activity">
+                            <a className="text-black">My Activity</a>
+                          </Link>
+                        </div>
+                        <div className="mb-1">
+                          <Link href="/dashboard/my-group">
+                            <a className="text-black">My group</a>
+                          </Link>
+                        </div>
+                        <Button type="primary" onClick={logOut}>
+                          Log out
+                        </Button>
                       </div>
-                      <div className="mb-1">
-                        <Link href="/dashboard/my-group">
-                          <a className="text-black">My group</a>
-                        </Link>
-                      </div>
-                      <Button type="primary" onClick={logOut}>
-                        Log out
-                      </Button>
+                    }
+                  >
+                    <div className="flex items-center">
+                      <Avatar
+                        size="large"
+                        src={
+                          profile?.profilePhoto
+                            ? profile?.profilePhoto
+                            : "https://joeschmoe.io/api/v1/random"
+                        }
+                      />
                     </div>
-                  }
-                >
-                  <div className="flex items-center">
-                    <Avatar
-                      size="large"
-                      src={
-                        profile?.profilePhoto
-                          ? profile?.profilePhoto
-                          : "https://joeschmoe.io/api/v1/random"
-                      }
-                    />
-                  </div>
-                </Popover>
-              </div>
+                  </Popover>
+                </div>
               </div>
             ) : (
               <div>

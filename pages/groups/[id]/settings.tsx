@@ -1,23 +1,28 @@
 import Head from 'next/head';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import Settings from '../../../src/components/Reused/Settings/Settings';
-import useToken from '../../../src/hooks/useToken';
 import { getGroupDetails } from '../../../src/request/getGroupDetails';
+import { redirectUnAuthenticatedSSR } from '../../../src/utils/utils';
 
 
-const SettingsPage = ({id}:any) => {
+const SettingsPage = () => {
   const [data, setData] = useState<any>(null);
   const [update, setUpdate] = useState(1);
-  const token =  useToken();
+  const {globalAccessToken:token} = useSelector((state:any) => state.user);
+  const router = useRouter();
+  const {id} = router.query;
+
+  
 
   useEffect(() => {
     const res = getGroupDetails(token, id);
     res.then((result) => {
       setData(result);
-      if(!result.IsCurrentUserManager && token) Router.push(`/groups/${id}/overview`);
+      if(!result.IsCurrentUserManager && token) router.push(`/groups/${id}/overview`);
     });
-  }, [update, token]);
+  }, [update, token, id]);
 
   return (
     <>
@@ -31,12 +36,5 @@ const SettingsPage = ({id}:any) => {
 
 export default SettingsPage;
 
-export async function getServerSideProps({ params }: any) {
-  const { id } = params;
-
-  return {
-    props: {
-      id,
-    },
-  };
-}
+SettingsPage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

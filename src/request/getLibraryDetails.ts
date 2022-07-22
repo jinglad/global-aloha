@@ -1,6 +1,6 @@
 import { globalalohaservice } from "../services/globalalohaservice";
 
-export const getLibraryDetails = async (id:any, token:string) => {
+export const getLibraryDetails = async (id:any, token:string | undefined) => {
   const response = await fetch(`${globalalohaservice}/v1/activity/${id}/settings`, {
     method: "GET",
     headers: {

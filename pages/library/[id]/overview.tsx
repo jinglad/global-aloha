@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import LibraryDetails from '../../../src/components/Library/LibraryDetails';
 import useToken from '../../../src/hooks/useToken';
 import { getLibraryDetails } from '../../../src/request/getLibraryDetails';
@@ -9,12 +10,12 @@ type PropsType = {
 
 const LibraryOverviewPage = ({id}:PropsType) => {
   const [data, setData] = useState<any>(null);
-  const token = useToken();
+  const {globalAccessToken:token} = useSelector((state:any) => state.user);
 
   useEffect(() => {
     const result = getLibraryDetails(id, token);
     result.then((res) => setData(res))
-  },[token])
+  },[token, id])
 
   return (
     <LibraryDetails data={data} />

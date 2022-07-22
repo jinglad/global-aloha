@@ -22,6 +22,11 @@ export const getProfile = async (
     // console.log(response?.json());
     const res = await response.json();
     dispatch(setProfile(res));
-    router.push("/profile");
+    // router.push("/profile");
+    await router.push(
+      router.query.from
+          ? decodeURIComponent(`${router.query.from}`)
+          : "/profile"
+  );
   }
 };

@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getRoles } from "../../../request/getRoles";
-import { token } from "../../../utils/utils";
 import Loader from "../Loader/Loader";
 
 type FilterPropsType = {
@@ -14,7 +13,7 @@ type FilterPropsType = {
 
 const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
   const [term, setTerm] = useState("");
-  const { globalAccessToken, user, profile } = useSelector(
+  const { globalAccessToken:token, user, profile } = useSelector(
     (state: any) => state.user
   );
   const [result, setResult] = useState([]);
@@ -74,7 +73,7 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
 
   useEffect(() => {
     const newRoles = getRoles(
-      globalAccessToken,
+      token,
       user.ApplicationId,
       user.TenantId
     );
