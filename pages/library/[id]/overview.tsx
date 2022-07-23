@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import LibraryDetails from '../../../src/components/Library/LibraryDetails';
-import useToken from '../../../src/hooks/useToken';
 import { getLibraryDetails } from '../../../src/request/getLibraryDetails';
 
 type PropsType = {

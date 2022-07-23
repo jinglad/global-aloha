@@ -24,8 +24,11 @@ const MyActivity = () => {
   const [library, setLibrary] = useState(myLibrary);
 
   useEffect(() => {
-    getMyActivity(dispatch, page, size, globalAccessToken, user.UserId);
-  }, []);
+    getMyActivity(dispatch, page, size, globalAccessToken, user?.UserId);
+    setLibrary(myLibrary);
+  }, [user, globalAccessToken]);
+
+
 
   const handleChange = (e: RadioChangeEvent) => {
     // console.log("radio checked", e.target.value);
@@ -34,7 +37,7 @@ const MyActivity = () => {
 
   const handleFilter = async () => {
     const response = await fetch(
-      `https://api-globalalohaservice-dev.saams.xyz/v1/activity/user/${user.UserId}/activity?pageIndex=${page}&pageSize=${size}&filterActivityType=${filterValue}`,
+      `https://api-globalalohaservice-dev.saams.xyz/v1/activity/user/${user?.UserId}/activity?pageIndex=${page}&pageSize=${size}&filterActivityType=${filterValue}`,
       {
         method: "GET",
         headers: {

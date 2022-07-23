@@ -2,16 +2,14 @@ import { Button, Pagination, PaginationProps, Space } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import useToken from "../../hooks/useToken";
 import { globalalohaservice } from "../../services/globalalohaservice";
-import GroupSidebar from "../Groups/GroupSidebar";
-import ActionModal from "../Reused/MemberDetails/ActionModal";
-import InviteModal from "../Reused/MemberDetails/InviteModal";
 import LibraryDetailsHeader from "./LibraryDetailsHeader";
 import LibrarySidebar from "./LibrarySidebar";
 import { getLibraryDetails } from "../../../src/request/getLibraryDetails";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import ActivityInvite from "./ActivityInvite";
+import DeleteModal from "../Reused/DeleteModal/DeleteModal";
 
 type PropsType = {};
 
@@ -20,9 +18,10 @@ const LibraryMember = ({}: PropsType) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
+  const [selected, setSelected] = useState<any>(null);
+  const [deleteModal, setDeleteModal] = useState(false);
   const { globalAccessToken: token } = useSelector((state: any) => state.user);
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useRouter().query; 
 
   const getLibraryMembers = async (page = 0) => {
     setLoading(true);
@@ -44,18 +43,12 @@ const LibraryMember = ({}: PropsType) => {
     }
   };
 
-  useEffect(() => {
-    const result = getLibraryDetails(id, token);
-    result.then((res) => setData(res));
-
-    getLibraryMembers();
-  }, [id, token]);
-
   const [open, setOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
 
   const onClose = () => setOpen(false);
   const onActionClose = () => setActionOpen(false);
+  const onDeleteClose = () => setDeleteModal(false);
 
   const columns: ColumnsType<any> = [
     {
@@ -74,7 +67,8 @@ const LibraryMember = ({}: PropsType) => {
       render: (_, record) => (
         <Space size="middle">
           {data?.HasManagerPrivileges && (
-            <Button
+            <>
+              <Button
               type="primary"
               onClick={() => {
                 setActionOpen(true);
@@ -82,6 +76,16 @@ const LibraryMember = ({}: PropsType) => {
             >
               Action
             </Button>
+            <Button
+            onClick={() => {
+              setSelected(record);
+              setDeleteModal(true);
+            }}
+            type="ghost"
+          >
+            Remove
+          </Button>
+            </>
           )}
         </Space>
       ),
@@ -101,6 +105,11 @@ const LibraryMember = ({}: PropsType) => {
     setCurrent(pageNo);
     setPage(pageNo - 1);
   };
+
+  useEffect(() => {
+    const result = getLibraryDetails(id, token);
+    result.then((res) => setData(res));
+  }, [id, token]);
 
   useEffect(() => {
     fetch(`${globalalohaservice}/v1/activity/activityroles`, {
@@ -187,7 +196,17 @@ const LibraryMember = ({}: PropsType) => {
         </div>
       </div>
       {/* <InviteModal open={open} onClose={onClose} fetchData={getLibraryMembers} /> */}
+      <ActivityInvite open={open} onClose={onClose} fetchData={getLibraryMembers} activityRole={activityRole} />
       {/* <ActionModal open={actionOpen} onClose={onActionClose} /> */}
+      <DeleteModal
+        open={deleteModal}
+        onClose={onDeleteClose}
+        fetchData={getLibraryMembers}
+        selected={selected}
+        collection={members}
+        page={page}
+        type="library"
+      />
     </>
   );
 };

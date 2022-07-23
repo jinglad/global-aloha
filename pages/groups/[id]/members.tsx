@@ -1,9 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Login from "../../../src/components/Login/Login";
 import MemberDetails from "../../../src/components/Reused/MemberDetails/MemberDetails";
-import useToken from "../../../src/hooks/useToken";
 import { getGroupDetails } from "../../../src/request/getGroupDetails";
 import { gagroupservice } from "../../../src/services/gagroupservice";
 import { redirectUnAuthenticatedSSR } from "../../../src/utils/utils";

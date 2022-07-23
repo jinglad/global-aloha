@@ -1,7 +1,7 @@
 import { Avatar } from "antd";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import useToken from "../../hooks/useToken";
+import { useSelector } from "react-redux";
 import { getActivityRole } from "../../request/getActivityRole";
 import { getBatchMembers } from "../../request/getBatchMembers";
 import { globalalohaservice } from "../../services/globalalohaservice";
@@ -13,7 +13,7 @@ const LibraryDetails = ({ data }: any) => {
   const [slogan, setSlogan] = useState<any>(null);
   const [leaderShip, setLeaderShip] = useState<any>(null);
   const [batchMember, setBatchMember] = useState<any>(null);
-  const token = useToken();
+  const {globalAccessToken:token} = useSelector((state:any) => state.user);
 
   useEffect(() => {
     const newProp = data?.Properties?.find(
@@ -23,12 +23,12 @@ const LibraryDetails = ({ data }: any) => {
   }, [data]);
 
   useEffect(() => {
-    const result = getActivityRole(data?.Id);
+    const result = getActivityRole(data?.Id, token);
     result.then((res) => setLeaderShip(res));
 
     const member = getBatchMembers(data?.Id, token);
     member.then((res) => setBatchMember(res));
-  }, [data]);
+  }, [data, token]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
-import useToken from "../../hooks/useToken";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { getNotification } from "../../request/getNotification";
 
 type PropsType = {
@@ -8,31 +8,38 @@ type PropsType = {
 };
 
 const Notification = ({ type }: PropsType) => {
-  const token = useToken();
+  const { globalAccessToken: token, user } = useSelector(
+    (state: any) => state.user
+  );
+  const [notification, setNotification] = useState<any>(null);
 
-  // useEffect(() => {
-  //   if (type === "notification") {
-  //     getNotification(token);
-  //   } else {
-  //     getRequest();
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (type === "notification") {
+      getNotification(token, user?.UserId).then((result) => {
+        setNotification(result);
+        console.log(result);
+      });
+    } else {
+      // getRequest();
+    }
+  }, [token, user]);
 
   return (
-    <>
+    <div className="w-4/5 mx-auto">
       <div>
         <Link href="/notifications">
-          <a className="text-black p-3 rounded hover:bg-slate-500 ">
+          <a className="text-black p-3 rounded hover:bg-slate-200 hover:text-black">
             Notifications
           </a>
         </Link>
         <Link href="/requests">
-          <a className="text-black p-3 rounded hover:bg-slate-500 ">
-            Notifications
+          <a className="text-black p-3 rounded hover:bg-slate-200 hover:text-black">
+            Request
           </a>
         </Link>
       </div>
-    </>
+      <div></div>
+    </div>
   );
 };
 

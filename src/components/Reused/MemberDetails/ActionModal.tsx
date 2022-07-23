@@ -1,12 +1,10 @@
 import { Modal, Radio, RadioChangeEvent } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useToken from "../../../hooks/useToken";
 import { getRoles } from "../../../request/getRoles";
 
 const ActionModal = ({ open, onClose, selected }: any) => {
-  const token = useToken();
-  const { user } = useSelector((state: any) => state.user);
+  const { user, globalAccessToken:token} = useSelector((state: any) => state.user);
   // console.log(user)
   const [roles, setRoles] = useState<any>(null);
   const [value, setValue] = useState<any>(null);

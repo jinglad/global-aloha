@@ -1,7 +1,6 @@
 import { globalalohaservice } from "../services/globalalohaservice";
-import { token } from "../utils/utils";
 
-export const getActivityRole = async (activityId: any) => {
+export const getActivityRole = async (activityId: any, token:string | undefined) => {
   const response = await fetch(
     `${globalalohaservice}/v1/activity/${activityId}/user/role`,
     {

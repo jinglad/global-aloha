@@ -2,7 +2,6 @@ import { Button, Pagination, PaginationProps, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import useToken from "../../../hooks/useToken";
 import { gagroupservice } from "../../../services/gagroupservice";
 import GroupSidebar from "../../Groups/GroupSidebar";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -31,7 +30,6 @@ const MemberDetails = ({
   const [actionOpen, setActionOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selected, setSelected] = useState<any>(null);
-  const token = useToken();
   const [tableData, setTableData] = useState<any>([]);
   const [current, setCurrent] = useState<number>(0);
   const [page, setPage] = useState(0);

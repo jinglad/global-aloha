@@ -1,10 +1,9 @@
 import { Avatar, Button, Popover } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import useToken from "../../../hooks/useToken";
 import { setAccessToken, setProfile, setUser } from "../../../Redux/userSlice";
 import { userservice } from "../../../services/userservice";
 import SearchModal from "../SearchModal/SearchModal";
@@ -14,6 +13,7 @@ import { useCookies } from "react-cookie";
 const AppHeader = () => {
   const [open, setOpen] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies(["ga_token"]);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   const onClose = () => {
     setOpen(false);
@@ -24,8 +24,11 @@ const AppHeader = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  useEffect(() => {
+    setIsClient(true);
+  },[cookie.ga_token])
+
   const logOut = async () => {
-    setCookie("ga_token", null);
     const response = await fetch(`${userservice}/v2/logout`, {
       method: "POST",
       headers: {
@@ -93,7 +96,7 @@ const AppHeader = () => {
                 </Link>
               </div>
             </div>
-            {globalAccessToken ? (
+            {isClient && cookie.ga_token ? (
               <div className="flex items-center">
                 <div className="mr-3">
                   <Link href="/notifications">

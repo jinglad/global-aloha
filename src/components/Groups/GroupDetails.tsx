@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getCollection } from "../../request/getCollection";
 import { getRoles } from "../../request/getRoles";
-import { token } from "../../utils/utils";
 import DetailsHeader from "../Reused/DetailsHeader/DetailsHeader";
 import GroupSidebar from "./GroupSidebar";
 
@@ -14,7 +13,7 @@ type propsType = {
 };
 
 const GroupDetails = ({ data }: propsType) => {
-  const { globalAccessToken, user } = useSelector((state: any) => state.user);
+  const { globalAccessToken:token, user } = useSelector((state: any) => state.user);
   const [collection, setCollection] = useState([]);
   const [advisor, setAdvisor] = useState([]);
   const [student, setStudent] = useState([]);
@@ -22,8 +21,7 @@ const GroupDetails = ({ data }: propsType) => {
   const [observer, setObserver] = useState([]);
   const [description, setDescription] = useState<any>(null);
   // const [roles, setRoles] = useState<any>(null);
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useRouter().query;
 
   // console.log({data})
 
@@ -53,7 +51,7 @@ const GroupDetails = ({ data }: propsType) => {
     setDescription(newDes);
 
     // console.log(data.Properties)
-  }, [data]);
+  }, [data, token]);
 
   return (
     <>
@@ -64,7 +62,7 @@ const GroupDetails = ({ data }: propsType) => {
         <div>
           <DetailsHeader data={data} />
           <div className="relative flex">
-            {globalAccessToken && (
+            {token && (
               <div>
                 <GroupSidebar data={data} />
               </div>
