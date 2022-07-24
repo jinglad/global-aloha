@@ -1,10 +1,10 @@
 import { globalalohaservice } from "../services/globalalohaservice";
-import { token } from "../utils/utils";
 
 export const getLibraryMembers = async (
   id: any,
   page = 0,
   size = 12,
+  token: string | undefined
 ) => {
   const response = await fetch(
     `${globalalohaservice}/${id}/members?memberStatuses=2&memberStatuses=5&memberStatuses=0&pageIndex=${page}&pageSize=${size}`,

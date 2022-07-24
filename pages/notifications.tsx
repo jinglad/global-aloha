@@ -1,12 +1,16 @@
 import React from 'react'
 import Notification from '../src/components/Notification/Notification'
+import { redirectUnAuthenticatedSSR } from '../src/utils/utils'
 
 const NotificationsPage = () => {
   return (
-    <div className='w-3/5 mx-auto mt-5'>
+    <div>
       <Notification type="notification" />
     </div>
   )
 }
 
 export default NotificationsPage
+
+NotificationsPage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

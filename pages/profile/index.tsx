@@ -9,5 +9,5 @@ const ProfilePage: NextPage = () => {
 
 export default ProfilePage;
 
-// ProfilePage.getInitialProps = async (context: any) =>
-//   redirectUnAuthenticatedSSR(context);
+ProfilePage.getInitialProps = async (context: any) =>
+  redirectUnAuthenticatedSSR(context);

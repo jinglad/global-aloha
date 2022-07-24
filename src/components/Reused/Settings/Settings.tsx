@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
-import { token } from "../../../utils/utils";
+import { useSelector } from "react-redux";
 import GroupSidebar from "../../Groups/GroupSidebar";
 import DetailsHeader from "../DetailsHeader/DetailsHeader";
 import Loader from "../Loader/Loader";
@@ -11,6 +11,7 @@ const Settings = ({ data, setUpdate }: any) => {
   const [description, setDescription] = useState<any>("");
   const [loader, setLoader] = useState(false);
   // const [data, setData] = useState(item);
+  const {globalAccessToken:token} = useSelector((state:any) => state.user);
 
   const setValue = (key:string) => {
     const newItem = data?.Properties?.find((item:any) => item.Key === key);

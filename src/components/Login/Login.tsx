@@ -54,6 +54,36 @@ const Login: React.FC = () => {
     }
   };
 
+  const statusCheck = async () => {
+    const response = await fetch(`${userservice}/api/v2/register/user/status`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        ApplicationId: "e1e0322c-acb0-4a24-958c-23b2ad912a2c",
+        Email: email,
+        TenantId: "af3baf1d-7aae-462c-9d1e-051cef459b86",
+      }),
+    });
+    if (response.ok) {
+      const res = await response.json();
+      if(res === "Inactive") {
+        alert("Your email has not been activated yet.");
+      } 
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (email) {
+        statusCheck();
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [email]);
+
   return (
     <>
       <Head>
@@ -114,7 +144,7 @@ const Login: React.FC = () => {
                 </div>
 
                 <div>
-                  <span>Don't have an account yet??</span>
+                  <span>Don{"'"}t have an account yet??</span>
                   <Link href="/signup">
                     <a className="text-lime-400 ml-2 hover:text-lime-600">
                       Sign Up

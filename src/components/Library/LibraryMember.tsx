@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ActivityInvite from "./ActivityInvite";
 import DeleteModal from "../Reused/DeleteModal/DeleteModal";
+import ActionModal from "../Reused/MemberDetails/ActionModal";
+import ActivityAction from "./ActivityAction";
 
 type PropsType = {};
 
@@ -68,14 +70,18 @@ const LibraryMember = ({}: PropsType) => {
         <Space size="middle">
           {data?.HasManagerPrivileges && (
             <>
-              <Button
+             {
+              record?.status > 0 &&  <Button
               type="primary"
               onClick={() => {
                 setActionOpen(true);
+                setSelected(record);
+                // console.log(record)
               }}
             >
               Action
             </Button>
+             }
             <Button
             onClick={() => {
               setSelected(record);
@@ -126,13 +132,14 @@ const LibraryMember = ({}: PropsType) => {
       })
       .then((data) => {
         setActivityRole(data);
+        // console.log(data);
       })
       .catch((err) => console.log(err));
   }, [token]);
 
   useEffect(() => {
     getLibraryMembers(page);
-  }, [page]);
+  }, [page, token]);
 
   useEffect(() => {
     const newArray = [];
@@ -145,6 +152,7 @@ const LibraryMember = ({}: PropsType) => {
       let newData: any = {
         id: element.UserId,
         name: element.Name,
+        status: element.MemberStatus,
         member_type: roleDetails?.RoleName,
       };
       newArray.push(newData);
@@ -197,7 +205,7 @@ const LibraryMember = ({}: PropsType) => {
       </div>
       {/* <InviteModal open={open} onClose={onClose} fetchData={getLibraryMembers} /> */}
       <ActivityInvite open={open} onClose={onClose} fetchData={getLibraryMembers} activityRole={activityRole} />
-      {/* <ActionModal open={actionOpen} onClose={onActionClose} /> */}
+      <ActivityAction open={actionOpen} onClose={onActionClose} fetchData={getLibraryMembers} activityRole={activityRole} selected={selected} />
       <DeleteModal
         open={deleteModal}
         onClose={onDeleteClose}

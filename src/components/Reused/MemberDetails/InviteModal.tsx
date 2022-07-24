@@ -74,11 +74,11 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
   useEffect(() => {
     const newRoles = getRoles(
       token,
-      user.ApplicationId,
-      user.TenantId
+      user?.ApplicationId,
+      user?.TenantId
     );
     newRoles.then((result) => setRoles(result));
-  }, []);
+  }, [user, token]);
 
   const handleRole = (index: number, role: string) => {
     const current = { ...invite[index] };
@@ -160,7 +160,7 @@ const InviteModal = ({ open, onClose, fetchData }: FilterPropsType) => {
       {invite?.length > 0 && (
         <div className="pb-3 h-48 overflow-y-scroll mt-2">
           {invite.map((item: any, i: number) => (
-            <div className="p-2 bg-gray-100 mb-1">
+            <div key={item?.UserId} className="p-2 bg-gray-100 mb-1">
               <p className="m-0 mb-1 font-bold">{item.Email}</p>
               <div>
                 {roles?.map((role: any) => (

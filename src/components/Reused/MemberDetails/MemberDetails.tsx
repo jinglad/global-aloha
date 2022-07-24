@@ -63,7 +63,8 @@ const MemberDetails = ({
         <Space size="middle">
           {data?.IsCurrentUserManager && (
             <>
-              <Button
+              {
+                record?.isAlreadyMember && <Button
                 type="primary"
                 onClick={() => {
                   setActionOpen(true);
@@ -76,6 +77,7 @@ const MemberDetails = ({
               >
                 Action
               </Button>
+              }
               <Button
                 onClick={() => {
                   setSelected(record);
@@ -92,9 +94,6 @@ const MemberDetails = ({
     },
   ];
 
-  // console.log(collection);
-
-  // console.log(setPage);
 
   const onChange: PaginationProps["onChange"] = (pageNo) => {
     setCurrent(pageNo);
@@ -111,6 +110,7 @@ const MemberDetails = ({
       const element = collection[i];
       let newData: any = {
         id: element.CollectionId,
+        isAlreadyMember: element.IsAlreadyMember,
         name: element.Name,
         member_type: element.RoleName,
         joining_date: new Date(element.JoinedDate).toDateString(),
@@ -169,6 +169,7 @@ const MemberDetails = ({
         open={actionOpen}
         onClose={onActionClose}
         selected={selected}
+        fetchData={fetchData}
       />
       <DeleteModal
         open={deleteModal}

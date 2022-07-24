@@ -1,23 +1,38 @@
 import { Modal, Radio, RadioChangeEvent } from "antd";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getRoles } from "../../../request/getRoles";
+import { gagroupservice } from "../../../services/gagroupservice";
 
-const ActionModal = ({ open, onClose, selected }: any) => {
+const ActionModal = ({ open, onClose, selected, fetchData }: any) => {
   const { user, globalAccessToken:token} = useSelector((state: any) => state.user);
   // console.log(user)
   const [roles, setRoles] = useState<any>(null);
   const [value, setValue] = useState<any>(null);
+  const {id} = useRouter().query;
 
   useEffect(() => {
-    const newRoles = getRoles(token, user?.ApplicationId, user?.TenantId);
-    newRoles.then((result) => {
+    getRoles(token, user?.ApplicationId, user?.TenantId).then((result) => {
       setRoles(result);
     });
-  }, [token]);
+  }, [token, user]);
 
-  const handleRole = (e: RadioChangeEvent) => {
+  const handleRole = async (e: RadioChangeEvent) => {
     setValue(e.target.value);
+    // console.log(e.target.value);
+    const response = await fetch(`${gagroupservice}/api/v1/group/${id}/collections/roles/${selected?.CollectionId}/${e.target.value}`, {
+      method: "PUT",
+      headers: {
+        "content-type":"application/json",
+        "authorization":`Bearer ${token}`
+      }
+    })
+    if(response.ok) {
+      alert("Role Changes Successfully");
+      fetchData();
+      onClose();
+    }
   };
 
   return (
